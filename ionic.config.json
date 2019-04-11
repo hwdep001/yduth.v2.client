@@ -1,0 +1,8 @@
+{
+  "name": "htudy-v2-client",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "b7010197"
+}
