@@ -22,3 +22,16 @@ System:
    npm               : 6.9.0
    OS                : Windows 10
 ```
+
+
+## [AngularFire2](https://github.com/angular/angularfire2)
+```
+$ npm install firebase @angular/fire --save
+```
+
+
+## [Google Plus](https://github.com/EddyVerbruggen/cordova-plugin-googleplus)
+```
+$ ionic cordova plugin add cordova-plugin-googleplus --save --variable REVERSED_CLIENT_ID=yourReversedClientID --variable WEB_APPLICATION_CLIENT_ID=yourwebapplicationclientid
+$ npm install --save @ionic-native/google-plus
+```
