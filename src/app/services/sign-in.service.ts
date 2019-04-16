@@ -1,28 +1,26 @@
-import { environment } from './../../../environments/environment';
-import { Component, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
+
+import { environment } from 'src/environments/environment';
 
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
-@Component({
-  selector: 'app-test',
-  templateUrl: './test.page.html',
-  styleUrls: ['./test.page.scss'],
-})
-export class TestPage implements OnInit {
+import { User } from './../models/User';
 
-  user: TestUser;
+@Injectable({
+  providedIn: 'root'
+})
+export class SignInService {
+
+  user: User;
 
   constructor(
     private platform: Platform,
     private gplus: GooglePlus,
     private afAuth: AngularFireAuth
   ) { }
-
-  ngOnInit() {
-  }
 
   signIn() {
     if (this.platform.is('cordova')) {
@@ -47,10 +45,9 @@ export class TestPage implements OnInit {
       ).then(firebaseUser => {
         console.log(firebaseUser);
 
-        this.user = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email
-        };
+        this.user = new User();
+        this.user.uid = firebaseUser.uid;
+        this.user.email = firebaseUser.email;
 
       }).catch(err => {
         console.log(err);
@@ -65,11 +62,11 @@ export class TestPage implements OnInit {
     const provider = new firebase.auth.GoogleAuthProvider();
     this.afAuth.auth.signInWithPopup(provider)
       .then(res => {
-        this.user = {
-          email: res.user.email,
-          uid: res.user.uid
-        };
         console.log(res);
+
+        this.user = new User();
+        this.user.uid = res.user.uid;
+        this.user.email = res.user.email;
       })
       .catch(err => {
         console.log(err);
@@ -85,9 +82,4 @@ export class TestPage implements OnInit {
       });
   }
 
-}
-
-interface TestUser {
-  uid: string;
-  email: string;
 }

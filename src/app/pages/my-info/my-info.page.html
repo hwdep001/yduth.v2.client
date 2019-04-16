@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>myInfo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-button expand="block" color="danger" (click)="signOut()">Sign Out</ion-button>
+  </ion-item>
+
+  <ion-item *ngIf="user">
+    {{user.uid}}
+  </ion-item>
+  <ion-item *ngIf="user">
+    {{user.email}}
+  </ion-item>
+</ion-content>
