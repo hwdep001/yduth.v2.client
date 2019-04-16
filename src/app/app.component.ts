@@ -8,12 +8,28 @@ import { Router } from '@angular/router';
 // firebase
 import { AngularFireAuth } from '@angular/fire/auth';
 
+interface MenuInterface {
+  title: string;
+  pages: Array<PageInterface>;
+}
+
+interface PageInterface {
+  title: string;
+  url: string;
+  icon: string;
+  param?: CustomObject;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  public appPages = [];
+
+  public menuDisabled: boolean;
+  public menus = new Array<MenuInterface>();
+
+  private pagesMap: Map<string, PageInterface>;
 
   constructor(
     private platform: Platform,
@@ -23,6 +39,7 @@ export class AppComponent {
 
     private afAuth: AngularFireAuth,
   ) {
+    this.initializePages();
     this.initializeApp();
   }
 
@@ -33,39 +50,37 @@ export class AppComponent {
 
       this.afAuth.auth.onAuthStateChanged(fireUser => {
         console.log('onAuthStateChanged: ' + fireUser);
-        this.initializePages(fireUser);
+        this.setMenus(fireUser);
       });
     });
   }
 
-  initializePages(fireUser: firebase.User) {
+  initializePages(): void {
+    const pagesMap = new Map<string, PageInterface>();
+    pagesMap.set('home', { title: 'Home', url: '/home', icon: 'home' });
+    pagesMap.set('list', { title: 'List', url: '/list', icon: 'list' });
+    pagesMap.set('my-info', { title: 'My Info', url: '/my-info', icon: 'person' });
+    this.pagesMap = pagesMap;
+  }
+
+  setMenus(fireUser: firebase.User) {
     if (fireUser == null) {
-      this.appPages = [
-        {
-          title: 'Sign In',
-          url: '/sign-in',
-          icon: 'list'
-        }
-      ];
+      this.menus = [];
+      this.menuDisabled = true;
       this.router.navigate(['sign-in']);
     } else {
-      this.appPages = [
-        {
-          title: 'Home',
-          url: '/home',
-          icon: 'home'
-        },
-        {
-          title: 'List',
-          url: '/list',
-          icon: 'list'
-        },
-        {
-          title: 'My Info',
-          url: '/my-info',
-          icon: 'list'
-        }
-      ];
+      const menus = new Array<MenuInterface>();
+
+      let pages = [];
+      pages.push(this.pagesMap.get('list'));
+      menus.push({ title: 'Study', pages: pages});
+
+      pages = [];
+      pages.push(this.pagesMap.get('my-info'));
+      menus.push({ title: 'Setting', pages: pages});
+
+      this.menus = menus;
+      this.menuDisabled = false;
       this.router.navigate(['home']);
     }
   }

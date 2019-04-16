@@ -3,6 +3,7 @@
 
 src/environments/
 google-services.json
+.firebase/hosting.d3d3.cache
 
 *~
 *.sw[mnpcod]
