@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 
 // firebase
 import { AngularFireAuth } from '@angular/fire/auth';
+
+// services
+import { SignInService } from 'src/app/services/sign-in.service';
+
+// models
+import { ResponseDate } from './models/ResponseData';
+import { User } from './models/User';
 
 interface MenuInterface {
   title: string;
@@ -37,22 +44,12 @@ export class AppComponent {
     private statusBar: StatusBar,
     private router: Router,
 
+    private toastCtrl: ToastController,
     private afAuth: AngularFireAuth,
+    private _signIn: SignInService
   ) {
     this.initializePages();
     this.initializeApp();
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-
-      this.afAuth.auth.onAuthStateChanged(fireUser => {
-        console.log('onAuthStateChanged: ' + fireUser);
-        this.setMenus(fireUser);
-      });
-    });
   }
 
   initializePages(): void {
@@ -63,8 +60,33 @@ export class AppComponent {
     this.pagesMap = pagesMap;
   }
 
-  setMenus(fireUser: firebase.User) {
-    if (fireUser == null) {
+  async initializeApp() {
+    await this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+    });
+
+    await this.afAuth.auth.onAuthStateChanged(async fireUser => {
+
+      if (fireUser != null) {
+        const resData: ResponseDate = await this._signIn.updateSignInInfo();
+        this.splashScreen.hide();
+
+        if (resData.res) {
+          this.setMenus(resData.data as User);
+        } else {
+          this._signIn.signOut();
+          this.presentToast(resData.toErrString());
+        }
+
+      } else {
+        this.splashScreen.hide();
+        this.setMenus(null);
+      }
+    });
+  }
+
+  setMenus(user: User) {
+    if (user == null) {
       this.menus = [];
       this.menuDisabled = true;
       this.router.navigate(['sign-in']);
@@ -83,5 +105,18 @@ export class AppComponent {
       this.menuDisabled = false;
       this.router.navigate(['home']);
     }
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      position: 'bottom',
+      color: 'danger',
+      showCloseButton: true,
+      closeButtonText: 'Close',
+      animated: true,
+      translucent: true
+    });
+    toast.present();
   }
 }

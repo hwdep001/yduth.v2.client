@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 import { environment } from 'src/environments/environment';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -14,11 +15,14 @@ export class HomePage {
   reqUrl: string;
 
   constructor(
+    private toastCtrl: ToastController,
     private http: HttpClient,
     private afAuth: AngularFireAuth
   ) {
     this.reqUrl = environment.apiServerUrl;
-    this.testApi();
+    // this.testApi();
+    console.log('home!!!!!!!!!!!!!!!!');
+    this.presentToastWithOptions('asdasdasd');
   }
 
   testApi(): Promise<any> {
@@ -34,6 +38,19 @@ export class HomePage {
         });
       });
     });
+  }
+
+  async presentToastWithOptions(message: string) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      position: 'middle',
+      color: 'danger',
+      showCloseButton: true,
+      closeButtonText: 'Close',
+      animated: true,
+      translucent: true
+    });
+    toast.present();
   }
 
 }

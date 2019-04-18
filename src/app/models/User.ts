@@ -1,6 +1,12 @@
 export class User {
     uid: string;
     email: string;
-    displayName: string;
-    photoUrl: string;
+    googleDisplayName: string;
+    googlePhotoUrl: string;
+    nickname: string;
+    photo: string;
+    createDate: string;
+    updateDate: string;
+    isUsed: boolean;
+    roleId: number;
 }
