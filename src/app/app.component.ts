@@ -59,11 +59,11 @@ export class AppComponent {
   }
 
   setMenus(user: User) {
-    if (user == null) {
+    if (user == null && this.menuDisabled === false) {
       this.menus = [];
       this.menuDisabled = true;
-      console.log(`[app] setMenus: X`);
-    } else {
+      // console.log(`[app] setMenus: X`);
+    } else if (user != null && this.menuDisabled === true) {
       const menus = new Array<MenuInterface>();
 
       let pages = [];
@@ -76,7 +76,7 @@ export class AppComponent {
 
       this.menus = menus;
       this.menuDisabled = false;
-      console.log(`[app] setMenus: O`);
+      // console.log(`[app] setMenus: O`);
     }
   }
 

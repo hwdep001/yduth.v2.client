@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
-import { BehaviorSubject } from 'rxjs';
 
 import { ResponseDate } from './../models/ResponseData';
 import { User } from './../models/User';
@@ -19,8 +18,6 @@ export class AuthService {
 
   private apiServerUrl: string;
   private user_: User = null;
-
-  public authenticationState = new BehaviorSubject(false);
 
   constructor(
     private platform: Platform,
@@ -99,13 +96,10 @@ export class AuthService {
       'offline': false,
       'scopes': 'profile email'
     }).then(provider => {
-
-      console.log(provider);
-
       this.afAuth.auth.signInWithCredential(
         firebase.auth.GoogleAuthProvider.credential(provider.idToken)
       ).then(firebaseUser => {
-        console.log(firebaseUser);
+        // console.log(firebaseUser);
       }).catch(err => {
         console.log(err);
       });
@@ -117,7 +111,13 @@ export class AuthService {
 
   webGoogleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    this.afAuth.auth.signInWithPopup(provider);
+    this.afAuth.auth.signInWithPopup(provider)
+      .then(userCredential => {
+        // console.log(userCredential);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   async updateSignInInfo(): Promise<User> {
