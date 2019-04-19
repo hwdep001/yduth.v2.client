@@ -50,21 +50,25 @@ export class AuthGuard implements CanActivate {
          * 로그인 안했을 경우 /sign-in 페이지만 허용
          */
         if (user) {
+          // 조건1
           if (state.url === '/sign-in') {
             // console.log(`[auth guard] ${state.url} - false -> home`);
             this.router.navigate(['home']);
             resolve(false);
           } else {
+          // 조건 2
             // console.log(`[auth guard] ${state.url} - true`);
             this.events.publish('menu-setting', user);
             resolve(true);
           }
         } else {
+          // 조건 3
           if (state.url === '/sign-in') {
             // console.log(`[auth guard] ${state.url} - true`);
             this.events.publish('menu-setting', user);
             resolve(true);
           } else {
+          // 조건 4
             // console.log(`[auth guard] ${state.url} - false -> sign-in`);
             state.url = '/sign-in';   // 로그인 화면에서 뒤로가기 방지용
             this.router.navigate(['sign-in']);
