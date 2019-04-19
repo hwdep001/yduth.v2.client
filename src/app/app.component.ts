@@ -1,18 +1,10 @@
 import { Component } from '@angular/core';
 
-import { Platform, ToastController, Events } from '@ionic/angular';
+import { Platform, Events } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Router } from '@angular/router';
-
-// firebase
-import { AngularFireAuth } from '@angular/fire/auth';
-
-// services
-import { AuthService } from './services/auth.service';
 
 // models
-import { ResponseDate } from './models/ResponseData';
 import { User } from './models/User';
 
 interface MenuInterface {
@@ -42,11 +34,7 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private router: Router,
-
-    private toastCtrl: ToastController,
-    private afAuth: AngularFireAuth,
-    private _auth: AuthService
+    private events: Events
   ) {
     this.initializePages();
     this.initializeApp();
@@ -63,27 +51,10 @@ export class AppComponent {
   async initializeApp() {
     await this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-    });
-
-    await this.afAuth.auth.onAuthStateChanged(async fireUser => {
-
-      console.log(`[app] onAuthStateChanged: ${fireUser}`);
-
-      if (fireUser != null) {
-        const resData: ResponseDate = await this._auth.updateSignInInfo();
+      this.events.subscribe('menu-setting', (fireUser) => {
         this.splashScreen.hide();
-
-        if (resData.res) {
-          this.setMenus(resData.data as User);
-        } else {
-          this._auth.signOut();
-          this.presentToast(resData.toErrString());
-        }
-
-      } else {
-        this.splashScreen.hide();
-        this.setMenus(null);
-      }
+        this.setMenus(fireUser);
+      });
     });
   }
 
@@ -91,8 +62,7 @@ export class AppComponent {
     if (user == null) {
       this.menus = [];
       this.menuDisabled = true;
-      console.log(`[app] setMenus: sign-in`);
-      this.router.navigate(['sign-in']);
+      console.log(`[app] setMenus: X`);
     } else {
       const menus = new Array<MenuInterface>();
 
@@ -106,21 +76,8 @@ export class AppComponent {
 
       this.menus = menus;
       this.menuDisabled = false;
-      console.log(`[app] setMenus: home`);
-      this.router.navigate(['home']);
+      console.log(`[app] setMenus: O`);
     }
   }
 
-  async presentToast(message: string) {
-    const toast = await this.toastCtrl.create({
-      message: message,
-      position: 'bottom',
-      color: 'danger',
-      showCloseButton: true,
-      closeButtonText: 'Close',
-      animated: true,
-      translucent: true
-    });
-    toast.present();
-  }
 }

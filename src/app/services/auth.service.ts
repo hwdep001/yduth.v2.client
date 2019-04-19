@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Platform } from '@ionic/angular';
+import { Platform, ToastController } from '@ionic/angular';
 
 import { environment } from 'src/environments/environment';
 
@@ -25,6 +25,7 @@ export class AuthService {
   constructor(
     private platform: Platform,
     private http: HttpClient,
+    private toastCtrl: ToastController,
     private gplus: GooglePlus,
     private afAuth: AngularFireAuth
   ) {
@@ -112,33 +113,43 @@ export class AuthService {
 
   webGoogleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    this.afAuth.auth.signInWithPopup(provider)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.afAuth.auth.signInWithPopup(provider);
   }
 
-  async updateSignInInfo(): Promise<ResponseDate> {
+  async updateSignInInfo(): Promise<User> {
 
     const idToken: string = await this.afAuth.auth.currentUser.getIdToken(true);
-    const httpResData = await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
+    const resDate = new ResponseDate(await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
       headers: new HttpHeaders().set('Authorization', idToken)
-    }).toPromise() as ResponseDate;
+    }).toPromise() as ResponseDate);
 
-    if (httpResData.res) {
-      this.user_ = httpResData.data as User;
+    if (resDate.res) {
+      this.user_ = resDate.data as User;
+    } else {
+      this.signOut();
+      this.presentToast(resDate.toErrString());
     }
 
-    return new ResponseDate(httpResData);
+    return this.user_;
   }
 
   signOut() {
     this.user_ = null;
     this.gplus.disconnect();
     this.afAuth.auth.signOut();
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      position: 'bottom',
+      color: 'danger',
+      showCloseButton: true,
+      closeButtonText: 'Close',
+      animated: true,
+      translucent: true
+    });
+    toast.present();
   }
 
 }
