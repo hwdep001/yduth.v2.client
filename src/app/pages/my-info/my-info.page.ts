@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './../../services/auth.service';
 import { User } from './../../models/User';
 
@@ -14,16 +13,14 @@ export class MyInfoPage implements OnInit {
 
   constructor(
     private _auth: AuthService,
-    private afAuth: AngularFireAuth
-  ) {
-    console.log('MyInfoPage');
-    if (this.afAuth.auth.currentUser != null) {
-      this.user.uid = this.afAuth.auth.currentUser.uid;
-      this.user.email = this.afAuth.auth.currentUser.email;
-    }
-  }
+  ) { }
 
   ngOnInit() {
+    console.log('MyInfoPage');
+    if (this._auth.user != null) {
+      this.user.uid = this._auth.uid;
+      this.user.email = this._auth.email;
+    }
   }
 
   signOut() {

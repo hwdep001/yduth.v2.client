@@ -3,7 +3,6 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Events } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from './../services/auth.service';
 
 import { User } from './../models/User';
@@ -16,7 +15,6 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private events: Events,
-    private afAuth: AngularFireAuth,
     private _auth: AuthService
   ) {}
 
@@ -26,7 +24,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Observable<boolean> | Promise<boolean> {
 
     return  new Promise((resolve, reject) => {
-      this.afAuth.auth.onAuthStateChanged(async (fireUser: firebase.User) => {
+      this._auth.getFireAuth().onAuthStateChanged(async (fireUser: firebase.User) => {
         console.log('[auth guard] onAuthStateChanged: ' + fireUser);
 
         /**

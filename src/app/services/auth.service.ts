@@ -80,6 +80,10 @@ export class AuthService {
     return this.existUser ? this.user_.roleId : 0;
   }
 
+  getFireAuth(): firebase.auth.Auth {
+    return this.afAuth.auth;
+  }
+
   signIn() {
     if (this.platform.is('cordova')) {
       this.nativeGoogleLogin();
