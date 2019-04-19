@@ -21,8 +21,8 @@ export class HomePage {
   ) {
     this.reqUrl = environment.apiServerUrl;
     // this.testApi();
-    console.log('home!!!!!!!!!!!!!!!!');
-    this.presentToastWithOptions('asdasdasd');
+    console.log('HomePage');
+    this.presentToastWithOptions('home!!!!!!!!!!!!!!!!');
   }
 
   testApi(): Promise<any> {

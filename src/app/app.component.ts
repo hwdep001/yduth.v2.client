@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform, ToastController, Events } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 // services
-import { SignInService } from 'src/app/services/sign-in.service';
+import { AuthService } from './services/auth.service';
 
 // models
 import { ResponseDate } from './models/ResponseData';
@@ -33,7 +33,7 @@ interface PageInterface {
 })
 export class AppComponent {
 
-  public menuDisabled: boolean;
+  public menuDisabled = true;
   public menus = new Array<MenuInterface>();
 
   private pagesMap: Map<string, PageInterface>;
@@ -46,7 +46,7 @@ export class AppComponent {
 
     private toastCtrl: ToastController,
     private afAuth: AngularFireAuth,
-    private _signIn: SignInService
+    private _auth: AuthService
   ) {
     this.initializePages();
     this.initializeApp();
@@ -67,14 +67,16 @@ export class AppComponent {
 
     await this.afAuth.auth.onAuthStateChanged(async fireUser => {
 
+      console.log(`[app] onAuthStateChanged: ${fireUser}`);
+
       if (fireUser != null) {
-        const resData: ResponseDate = await this._signIn.updateSignInInfo();
+        const resData: ResponseDate = await this._auth.updateSignInInfo();
         this.splashScreen.hide();
 
         if (resData.res) {
           this.setMenus(resData.data as User);
         } else {
-          this._signIn.signOut();
+          this._auth.signOut();
           this.presentToast(resData.toErrString());
         }
 
@@ -89,6 +91,7 @@ export class AppComponent {
     if (user == null) {
       this.menus = [];
       this.menuDisabled = true;
+      console.log(`[app] setMenus: sign-in`);
       this.router.navigate(['sign-in']);
     } else {
       const menus = new Array<MenuInterface>();
@@ -103,6 +106,7 @@ export class AppComponent {
 
       this.menus = menus;
       this.menuDisabled = false;
+      console.log(`[app] setMenus: home`);
       this.router.navigate(['home']);
     }
   }
