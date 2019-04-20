@@ -50,9 +50,13 @@ export class AppComponent {
 
   async initializeApp() {
     await this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+
+      if (this.platform.is('cordova')) {
+        this.statusBar.styleDefault();
+      }
+
       this.events.subscribe('menu-setting', (fireUser) => {
-        this.splashScreen.hide();
+        this.hideSplashScreen();
         this.setMenus(fireUser);
       });
     });
@@ -62,7 +66,7 @@ export class AppComponent {
     if (user == null && this.menuDisabled === false) {
       this.menus = [];
       this.menuDisabled = true;
-      // console.log(`[app] setMenus: X`);
+
     } else if (user != null && this.menuDisabled === true) {
       const menus = new Array<MenuInterface>();
 
@@ -76,7 +80,12 @@ export class AppComponent {
 
       this.menus = menus;
       this.menuDisabled = false;
-      // console.log(`[app] setMenus: O`);
+    }
+  }
+
+  hideSplashScreen(): void {
+    if (this.platform.is('cordova')) {
+      this.splashScreen.hide();
     }
   }
 

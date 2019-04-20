@@ -24,6 +24,18 @@ System:
 ```
 
 
+## [Status Bar](https://ionicframework.com/docs/native/status-bar)
+```
+$ ionic cordova plugin add cordova-plugin-statusbar
+$ npm install --save @ionic-native/status-bar
+```
+
+
+## [Splash Screen](https://github.com/apache/cordova-plugin-splashscreen)
+```
+```
+
+
 ## [AngularFire2](https://github.com/angular/angularfire2)
 ```
 $ npm install firebase @angular/fire --save

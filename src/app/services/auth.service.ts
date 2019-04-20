@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform, ToastController, LoadingController } from '@ionic/angular';
 
 import { environment } from 'src/environments/environment';
 
@@ -23,6 +23,7 @@ export class AuthService {
     private platform: Platform,
     private http: HttpClient,
     private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
     private gplus: GooglePlus,
     private afAuth: AngularFireAuth
   ) {
@@ -81,50 +82,65 @@ export class AuthService {
     return this.afAuth.auth;
   }
 
-  signIn() {
+  async signIn() {
+    const loading = await this.getLoading();
+    loading.present();
+
+    const promises = new Array();
+
     if (this.platform.is('cordova')) {
-      this.nativeGoogleLogin();
+      promises.push(await this.nativeGoogleLogin());
     } else {
-      this.webGoogleLogin();
+      promises.push(await this.webGoogleLogin());
     }
+
+    Promise.all(promises)
+      .catch(err => {
+        // console.log(err);
+      })
+      .finally(() => loading.dismiss());
   }
 
-  nativeGoogleLogin() {
-
-    this.gplus.login({
-      'webClientId': environment.webClientId,
-      'offline': false,
-      'scopes': 'profile email'
-    }).then(provider => {
-      this.afAuth.auth.signInWithCredential(
-        firebase.auth.GoogleAuthProvider.credential(provider.idToken)
-      ).then(firebaseUser => {
-        // console.log(firebaseUser);
-      }).catch(err => {
-        console.log(err);
-      });
-
-    }).catch(err => {
-      console.log(err);
+  webGoogleLogin(): Promise<any> {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return this.afAuth.auth.signInWithPopup(provider).catch(err => {
+      // popup 취소 에러
+      // console.log(err);
     });
   }
 
-  webGoogleLogin() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    this.afAuth.auth.signInWithPopup(provider)
-      .then(userCredential => {
-        // console.log(userCredential);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  async nativeGoogleLogin(): Promise<any> {
+    return this.gplus.login(this.getGoogleLoginOptions()).then(provider => {
+      return this.afAuth.auth.signInAndRetrieveDataWithCredential(
+        firebase.auth.GoogleAuthProvider.credential(provider.idToken)
+      );
+    }).catch(err => {
+      // console.log(err);
+    });
+  }
+
+  googleTrySilentLogin() {
+    this.gplus.trySilentLogin(this.getGoogleLoginOptions());
+  }
+
+  getGoogleLoginOptions()  {
+    return {
+      'webClientId': environment.webClientId,
+      'offline': false,
+      'scopes': 'profile email'
+    };
   }
 
   async updateSignInInfo(): Promise<User> {
 
+    if (this.platform.is('cordova')) {
+      this.googleTrySilentLogin();
+    }
+
     const idToken: string = await this.afAuth.auth.currentUser.getIdToken(true);
-    const resDate = new ResponseDate(await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
-      headers: new HttpHeaders().set('Authorization', idToken)
+    const resDate = new ResponseDate(
+      await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
+        headers: new HttpHeaders().set('Authorization', idToken)
     }).toPromise() as ResponseDate);
 
     if (resDate.res) {
@@ -137,9 +153,13 @@ export class AuthService {
     return this.user_;
   }
 
-  signOut() {
+  async signOut() {
     this.user_ = null;
-    this.gplus.disconnect();
+
+    if (this.platform.is('cordova')) {
+      await this.gplus.disconnect();
+    }
+
     this.afAuth.auth.signOut();
   }
 
@@ -154,6 +174,18 @@ export class AuthService {
       translucent: true
     });
     toast.present();
+  }
+
+  async getLoading(message?: string, duration?: number, backdropDismiss?: boolean): Promise<HTMLIonLoadingElement> {
+    return await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: (message == null ? 'Loading...' : message),
+      animated: true,
+      translucent: true,
+      showBackdrop: true,
+      backdropDismiss: (backdropDismiss == null ? false : true),
+      duration: (duration == null ? 0 : duration)
+    });
   }
 
 }
