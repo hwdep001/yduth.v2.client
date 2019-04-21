@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Events } from '@ionic/angular';
+import { Platform, Events, IonRouterOutlet, ToastController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -25,6 +26,11 @@ interface PageInterface {
 })
 export class AppComponent {
 
+  // set up hardware back button event.
+  lastTimeBackPress = 0;
+  timePeriodToExit = 2000;
+  @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
+
   public menuDisabled = true;
   public menus = new Array<MenuInterface>();
 
@@ -34,7 +40,10 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private events: Events
+    private events: Events,
+    private router: Router,
+    private toastCtrl: ToastController,
+    private menu: MenuController,
   ) {
     this.initializePages();
     this.initializeApp();
@@ -55,6 +64,7 @@ export class AppComponent {
         this.statusBar.styleDefault();
       }
 
+      this.subscribeBackButton();
       this.events.subscribe('menu-setting', (fireUser) => {
         this.hideSplashScreen();
         this.setMenus(fireUser);
@@ -87,6 +97,81 @@ export class AppComponent {
     if (this.platform.is('cordova')) {
       this.splashScreen.hide();
     }
+  }
+
+  subscribeBackButton(): void {
+    this.platform.backButton.subscribeWithPriority(0, async () => {
+
+      // close side menu
+      try {
+        const element = await this.menu.getOpen();
+        if (element) {
+          this.menu.close();
+          return;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
+      // close modal
+      // try {
+      //   const element = await this.modalCtrl.getTop();
+      //   if (element) {
+      //     element.dismiss();
+      //     return;
+      //   }
+      // } catch (err) {
+      //   console.log(err);
+      // }
+
+      // close action sheet
+      // try {
+      //   const element = await this.actionSheetCtrl.getTop();
+      //   if (element) {
+      //     element.dismiss();
+      //     return;
+      //   }
+      // } catch (err) {
+      //   console.log(err);
+      // }
+
+      // close popover
+      // try {
+      //   const element = await this.popoverCtrl.getTop();
+      //   if (element) {
+      //     element.dismiss();
+      //     return;
+      //   }
+      // } catch (err) {
+      //   console.log(err);
+      // }
+
+      if (this.router.url === '/sign-in') {
+        navigator['app'].exitApp();
+      } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
+        this.routerOutlet.pop();
+      } else {
+
+        if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
+          navigator['app'].exitApp(); // work in ionic 4
+        } else {
+            this.backBtnToast();
+            this.lastTimeBackPress = new Date().getTime();
+        }
+      }
+    });
+  }
+
+  async backBtnToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Press back again to exit App.',
+      position: 'bottom',
+      color: 'medium',
+      animated: true,
+      translucent: true,
+      duration: 2000
+    });
+    toast.present();
   }
 
 }
