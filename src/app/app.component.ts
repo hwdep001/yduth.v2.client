@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Events, IonRouterOutlet, ToastController, MenuController } from '@ionic/angular';
+import { Platform, Events, IonRouterOutlet, MenuController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -28,7 +28,7 @@ export class AppComponent {
 
   // set up hardware back button event.
   lastTimeBackPress = 0;
-  timePeriodToExit = 2000;
+  timePeriodToExitAlert = 1000;
   @ViewChild(IonRouterOutlet) routerOutlet: IonRouterOutlet;
 
   public menuDisabled = true;
@@ -42,7 +42,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private events: Events,
     private router: Router,
-    private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private menu: MenuController,
   ) {
     this.initializePages();
@@ -59,6 +59,9 @@ export class AppComponent {
 
   async initializeApp() {
     await this.platform.ready().then(() => {
+
+      // alert(this.platform.platforms().toString());
+      console.log(this.platform.platforms().toString());
 
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();
@@ -151,27 +154,33 @@ export class AppComponent {
       } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
         this.routerOutlet.pop();
       } else {
-
-        if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
-          navigator['app'].exitApp(); // work in ionic 4
+        if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExitAlert) {
+          this.presentBackBtnAlert();
         } else {
-            this.backBtnToast();
-            this.lastTimeBackPress = new Date().getTime();
+          this.lastTimeBackPress = new Date().getTime();
         }
       }
     });
   }
 
-  async backBtnToast() {
-    const toast = await this.toastCtrl.create({
-      message: 'Press back again to exit App.',
-      position: 'bottom',
-      color: 'medium',
-      animated: true,
-      translucent: true,
-      duration: 2000
+  async presentBackBtnAlert() {
+    const alert = await this.alertCtrl.create({
+      header: 'EXIT',
+      message: 'Are you sure you want to <strong>exit</strong>?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }, {
+          text: 'Exit',
+          handler: () => {
+            navigator['app'].exitApp();
+          }
+        }
+      ]
     });
-    toast.present();
+
+    await alert.present();
   }
 
 }
