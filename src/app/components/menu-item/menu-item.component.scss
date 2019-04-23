@@ -1,0 +1,11 @@
+ion-item {
+  border-left: 6px solid white;
+}
+
+.active-item {
+  border-left: 6px solid var(--ion-color-primary);
+
+  ion-icon {
+    color: var(--ion-color-primary);
+  }
+}

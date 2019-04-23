@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
+import { MenuItemComponent } from './components/menu-item/menu-item.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { environment } from './../environments/environment';
@@ -18,7 +19,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, MenuItemComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

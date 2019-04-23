@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, RouterEvent, NavigationEnd } from '@angular/router';
 import { Component, ViewChild } from '@angular/core';
 
 import { Platform, Events, IonRouterOutlet, MenuController, AlertController } from '@ionic/angular';
@@ -68,11 +68,32 @@ export class AppComponent {
       }
 
       this.subscribeBackButton();
-      this.events.subscribe('menu-setting', (fireUser) => {
-        this.hideSplashScreen();
-        this.setMenus(fireUser);
-      });
+      this.subscribeActiveMenu();
+      this.subscribeMenuSetting();
     });
+  }
+
+  subscribeActiveMenu(): void {
+    this.router.events.subscribe((event: RouterEvent) => {
+      if (event instanceof NavigationEnd) {
+        this.pagesMap.forEach( (p, key) => {
+          return p['active'] = (event.url === p.url || event.url === '/' && p.url === '/home');
+        });
+      }
+    });
+  }
+
+  subscribeMenuSetting(): void {
+    this.events.subscribe('menu-setting', (fireUser) => {
+      this.hideSplashScreen();
+      this.setMenus(fireUser);
+    });
+  }
+
+  hideSplashScreen(): void {
+    if (this.platform.is('cordova')) {
+      this.splashScreen.hide();
+    }
   }
 
   setMenus(user: User) {
@@ -84,6 +105,10 @@ export class AppComponent {
       const menus = new Array<MenuInterface>();
 
       let pages = [];
+      pages.push(this.pagesMap.get('home'));
+      menus.push({ title: 'Menu', pages: pages});
+
+      pages = [];
       pages.push(this.pagesMap.get('list'));
       menus.push({ title: 'Study', pages: pages});
 
@@ -93,12 +118,6 @@ export class AppComponent {
 
       this.menus = menus;
       this.menuDisabled = false;
-    }
-  }
-
-  hideSplashScreen(): void {
-    if (this.platform.is('cordova')) {
-      this.splashScreen.hide();
     }
   }
 
