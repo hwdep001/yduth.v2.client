@@ -31,6 +31,11 @@ const routes: Routes = [
     path: pageInfo.myInfo.path,
     loadChildren: './pages/my-info/my-info.module#MyInfoPageModule',
     canActivate: [AuthGuard]
+  },
+  {
+    path: pageInfo.photo.path,
+    loadChildren: './pages/photo/photo.module#PhotoPageModule',
+    canActivate: [AuthGuard]
   }
 ];
 

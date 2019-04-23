@@ -8,18 +8,23 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
-import { MenuItemComponent } from './components/menu-item/menu-item.component';
 import { AppRoutingModule } from './app-routing.module';
-
-import { environment } from './../environments/environment';
+import { MenuHeaderComponent } from './components/menu-header/menu-header.component';
+import { MenuContentComponent } from './components/menu-content/menu-content.component';
 
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
+import { environment } from './../environments/environment';
+
 @NgModule({
-  declarations: [AppComponent, MenuItemComponent],
+  declarations: [
+    AppComponent,
+    MenuHeaderComponent,
+    MenuContentComponent
+  ],
   entryComponents: [],
   imports: [
     BrowserModule,

@@ -10,18 +10,6 @@ import { environment } from 'src/environments/environment';
 // models
 import { User } from './models/User';
 
-interface MenuInterface {
-  title: string;
-  pages: Array<PageInterface>;
-}
-
-interface PageInterface {
-  title: string;
-  url: string;
-  icon: string;
-  param?: CustomObject;
-}
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
@@ -36,6 +24,8 @@ export class AppComponent {
   public menuDisabled = true;
   public menus = new Array<MenuInterface>();
   private pagesMap: Map<string, PageInterface>;
+
+  public user: User;
 
   constructor(
     private platform: Platform,
@@ -59,14 +49,14 @@ export class AppComponent {
     this.pagesMap = pagesMap;
   }
 
-  async initializeApp() {
+  async initializeApp(): Promise<any> {
     await this.platform.ready().then(() => {
 
       // alert(this.platform.platforms().toString());
       console.log(this.platform.platforms().toString());
 
       if (this.platform.is('cordova')) {
-        this.statusBar.styleDefault();
+        this.statusBar.styleLightContent();
       }
 
       this.subscribeBackButton();
@@ -86,9 +76,9 @@ export class AppComponent {
   }
 
   subscribeMenuSetting(): void {
-    this.events.subscribe('menu-setting', (fireUser) => {
+    this.events.subscribe('menu-setting', (user: User) => {
       this.hideSplashScreen();
-      this.setMenus(fireUser);
+      this.setMenus(user);
     });
   }
 
@@ -98,7 +88,9 @@ export class AppComponent {
     }
   }
 
-  setMenus(user: User) {
+  setMenus(user: User): void {
+    this.user = user;
+
     if (user == null && this.menuDisabled === false) {
       this.menus = [];
       this.menuDisabled = true;
@@ -184,7 +176,7 @@ export class AppComponent {
     });
   }
 
-  async presentExitAlert() {
+  async presentExitAlert(): Promise<any> {
     const alert = await this.alertCtrl.create({
       header: 'EXIT',
       message: 'Are you sure you want to <strong>exit</strong>?',
@@ -201,7 +193,7 @@ export class AppComponent {
       ]
     });
 
-    await alert.present();
+    return await alert.present();
   }
 
 }

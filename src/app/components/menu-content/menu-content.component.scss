@@ -1,0 +1,27 @@
+ion-list {
+
+  padding: 0px;
+
+  ion-list-header {
+    max-height: 30px;
+    min-height: 30px;
+    padding-left: 6px;
+  }
+
+  ion-item {
+    border-left: 6px solid white;
+    --padding-start: 0px;
+
+    ion-icon {
+      margin: 12px;
+    }
+  }
+  
+  .active-item {
+    border-left: 6px solid var(--ion-color-primary);
+  
+    ion-icon {
+      color: var(--ion-color-primary);
+    }
+  }
+}
