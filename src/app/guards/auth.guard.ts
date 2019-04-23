@@ -3,6 +3,8 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Events } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
+import { environment } from 'src/environments/environment';
+
 import { AuthService } from './../services/auth.service';
 
 import { User } from './../models/User';
@@ -14,6 +16,7 @@ export class AuthGuard implements CanActivate {
 
   private isSubscription = false;
   private unsubscribe: firebase.Unsubscribe;
+  private pageInfo = environment.pageInfo;
 
   constructor(
     private router: Router,
@@ -51,9 +54,9 @@ export class AuthGuard implements CanActivate {
          */
         if (user) {
           // 조건1
-          if (state.url === '/sign-in') {
+          if (state.url === this.pageInfo.signIn.url) {
             // console.log(`[auth guard] ${state.url} - false -> home`);
-            this.router.navigate(['home']);
+            this.router.navigate([this.pageInfo.home.url]);
             resolve(false);
           } else {
           // 조건 2
@@ -63,15 +66,15 @@ export class AuthGuard implements CanActivate {
           }
         } else {
           // 조건 3
-          if (state.url === '/sign-in') {
+          if (state.url === this.pageInfo.signIn.url) {
             // console.log(`[auth guard] ${state.url} - true`);
             this.events.publish('menu-setting', user);
             resolve(true);
           } else {
           // 조건 4
             // console.log(`[auth guard] ${state.url} - false -> sign-in`);
-            state.url = '/sign-in';   // 로그인 화면에서 뒤로가기 방지용
-            this.router.navigate(['sign-in']);
+            state.url = this.pageInfo.signIn.url;   // 로그인 화면에서 뒤로가기 방지용
+            this.router.navigate([this.pageInfo.signIn.url]);
             resolve(false);
           }
         }

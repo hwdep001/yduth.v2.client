@@ -5,6 +5,8 @@ import { Platform, Events, IonRouterOutlet, MenuController, AlertController } fr
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import { environment } from 'src/environments/environment';
+
 // models
 import { User } from './models/User';
 
@@ -33,7 +35,6 @@ export class AppComponent {
 
   public menuDisabled = true;
   public menus = new Array<MenuInterface>();
-
   private pagesMap: Map<string, PageInterface>;
 
   constructor(
@@ -50,10 +51,11 @@ export class AppComponent {
   }
 
   initializePages(): void {
+    const pageInfo = environment.pageInfo;
     const pagesMap = new Map<string, PageInterface>();
-    pagesMap.set('home', { title: 'Home', url: '/home', icon: 'home' });
-    pagesMap.set('list', { title: 'List', url: '/list', icon: 'list' });
-    pagesMap.set('my-info', { title: 'My Info', url: '/my-info', icon: 'person' });
+    pagesMap.set('home', { title: 'Home', url: pageInfo.home.url, icon: 'home' });
+    pagesMap.set('list', { title: 'List', url: pageInfo.list.url, icon: 'list' });
+    pagesMap.set('my-info', { title: 'My Info', url: pageInfo.myInfo.url, icon: 'person' });
     this.pagesMap = pagesMap;
   }
 
@@ -174,7 +176,7 @@ export class AppComponent {
         this.routerOutlet.pop();
       } else {
         if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExitAlert) {
-          this.presentBackBtnAlert();
+          this.presentExitAlert();
         } else {
           this.lastTimeBackPress = new Date().getTime();
         }
@@ -182,7 +184,7 @@ export class AppComponent {
     });
   }
 
-  async presentBackBtnAlert() {
+  async presentExitAlert() {
     const alert = await this.alertCtrl.create({
       header: 'EXIT',
       message: 'Are you sure you want to <strong>exit</strong>?',
