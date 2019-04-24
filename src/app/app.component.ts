@@ -43,11 +43,11 @@ export class AppComponent {
   initializePages(): void {
     const p = environment.pageInfo;
     const pagesMap = new Map<string, PageInterface>();
-    pagesMap.set('home', { title: '홈', url: p.home.url, activeUrl: p.home.url, icon: 'home' });
-    pagesMap.set('cat-list', { title: '단어장', url: p.catList.url, activeUrl: p.catList.url, icon: 'book' });
-    pagesMap.set('group-list', { title: '그룹', url: p.groupList.url, activeUrl: p.groupList.url, icon: 'people' });
-    pagesMap.set('profile', { title: '프로필', url: p.profile.url, activeUrl: p.profile.url, icon: 'person' });
-    pagesMap.set('temp', { title: 'temp', url: p.temp.url, activeUrl: p.temp.url, icon: 'person' });
+    pagesMap.set('home', { title: '홈', url: p.home.url, icon: 'home' });
+    pagesMap.set('cat-list', { title: '단어장', url: p.catList.url, icon: 'book' });
+    pagesMap.set('group-list', { title: '그룹', url: p.groupList.url, icon: 'people' });
+    pagesMap.set('profile', { title: '프로필', url: p.profile.url, icon: 'person' });
+    pagesMap.set('temp', { title: 'temp', url: p.temp.url, icon: 'person' });
     this.pagesMap = pagesMap;
   }
 
@@ -71,7 +71,8 @@ export class AppComponent {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         this.pagesMap.forEach( (p, key) => {
-          return p['active'] = (event.url === p.activeUrl || event.url === '/' && p.url === '/home');
+          const activeUrl = '/' + event.url.split('/')[1];
+          return p['active'] = (activeUrl === p.url || event.url === '/' && p.url === '/home');
         });
       }
     });
