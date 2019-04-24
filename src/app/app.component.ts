@@ -43,17 +43,18 @@ export class AppComponent {
   initializePages(): void {
     const pageInfo = environment.pageInfo;
     const pagesMap = new Map<string, PageInterface>();
-    pagesMap.set('home', { title: 'Home', url: pageInfo.home.url, icon: 'home' });
-    pagesMap.set('list', { title: 'List', url: pageInfo.list.url, icon: 'list' });
-    pagesMap.set('my-info', { title: 'My Info', url: pageInfo.myInfo.url, icon: 'person' });
+    pagesMap.set('home', { title: '홈', url: pageInfo.home.url, icon: 'home' });
+    pagesMap.set('cat-list', { title: '단어장', url: pageInfo.catList.url, icon: 'book' });
+    pagesMap.set('group-list', { title: '그룹', url: pageInfo.groupList.url, icon: 'people' });
+    pagesMap.set('profile', { title: '프로필', url: pageInfo.profile.url, icon: 'person' });
     this.pagesMap = pagesMap;
   }
 
   async initializeApp(): Promise<any> {
     await this.platform.ready().then(() => {
 
-      // alert(this.platform.platforms().toString());
-      console.log(this.platform.platforms().toString());
+      // alert('platform: ' + this.platform.platforms().toString());
+      console.log('platform: ' + this.platform.platforms().toString());
 
       if (this.platform.is('cordova')) {
         this.statusBar.styleLightContent();
@@ -100,14 +101,12 @@ export class AppComponent {
 
       let pages = [];
       pages.push(this.pagesMap.get('home'));
+      pages.push(this.pagesMap.get('cat-list'));
+      pages.push(this.pagesMap.get('group-list'));
       menus.push({ title: 'Menu', pages: pages});
 
       pages = [];
-      pages.push(this.pagesMap.get('list'));
-      menus.push({ title: 'Study', pages: pages});
-
-      pages = [];
-      pages.push(this.pagesMap.get('my-info'));
+      pages.push(this.pagesMap.get('profile'));
       menus.push({ title: 'Setting', pages: pages});
 
       this.menus = menus;

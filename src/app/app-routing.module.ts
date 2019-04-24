@@ -23,13 +23,18 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: pageInfo.list.path,
-    loadChildren: './pages/list/list.module#ListPageModule',
+    path: pageInfo.catList.path,
+    loadChildren: './pages/cat-list/cat-list.module#CatListPageModule',
     canActivate: [AuthGuard]
   },
   {
-    path: pageInfo.myInfo.path,
-    loadChildren: './pages/my-info/my-info.module#MyInfoPageModule',
+    path: pageInfo.groupList.path,
+    loadChildren: './pages/group-list/group-list.module#GroupListPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: pageInfo.profile.path,
+    loadChildren: './pages/profile/profile.module#ProfilePageModule',
     canActivate: [AuthGuard]
   },
   {
