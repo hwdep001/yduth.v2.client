@@ -94,6 +94,9 @@ export class AuthService {
       promises.push(await this.webGoogleLogin());
     }
 
+    // test login for devapp
+    // promises.push(await this.webGoogleLogin());
+
     Promise.all(promises)
       .catch(err => {
         // console.log(err);

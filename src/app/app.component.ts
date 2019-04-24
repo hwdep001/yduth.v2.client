@@ -47,7 +47,7 @@ export class AppComponent {
     pagesMap.set('cat-list', { title: '단어장', url: p.catList.url, icon: 'book' });
     pagesMap.set('group-list', { title: '그룹', url: p.groupList.url, icon: 'people' });
     pagesMap.set('profile', { title: '프로필', url: p.profile.url, icon: 'person' });
-    pagesMap.set('temp', { title: 'temp', url: p.temp.url, icon: 'person' });
+    pagesMap.set('temp', { title: 'temp', url: p.temp.url, icon: 'settings' });
     this.pagesMap = pagesMap;
   }
 

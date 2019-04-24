@@ -4,20 +4,30 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      Profile
+      프로필
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-item>
-    <ion-button expand="block" color="danger" (click)="signOut()">Sign Out</ion-button>
-  </ion-item>
 
+  <ion-item lines="none">
+    <ion-avatar slot="start" class="cursor" (click)="closeMenu()"
+        [routerLink]="[pageInfo.photo.url, user.photo]" routerDirection="forward">
+      <img [src]="user.photo ? user.photo : 'assets/img/google_default_photo.jpg'">
+    </ion-avatar>
+  </ion-item>
+  
+  <ion-list-header></ion-list-header>
   <ion-item *ngIf="user">
     {{user.uid}}
   </ion-item>
   <ion-item *ngIf="user">
     {{user.email}}
+  </ion-item>
+
+  <ion-list-header></ion-list-header>
+  <ion-item>
+    <ion-button expand="block" color="danger" (click)="signOut()">Sign Out</ion-button>
   </ion-item>
 </ion-content>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
+import { environment } from 'src/environments/environment';
 import { AuthService } from './../../services/auth.service';
 
 import { User } from './../../models/User';
@@ -11,18 +13,26 @@ import { User } from './../../models/User';
 })
 export class ProfilePage implements OnInit {
 
+  public pageInfo;
   user: User = new User();
 
   constructor(
     private _auth: AuthService,
-  ) { }
-
-  ngOnInit() {
-    console.log('ProfilePage');
+    public menuCtrl: MenuController
+  ) {
+    this.pageInfo = environment.pageInfo;
     if (this._auth.user != null) {
       this.user.uid = this._auth.uid;
       this.user.email = this._auth.email;
     }
+  }
+
+  ngOnInit() {
+    console.log('ProfilePage');
+  }
+
+  closeMenu() {
+    this.menuCtrl.close();
   }
 
   signOut() {
