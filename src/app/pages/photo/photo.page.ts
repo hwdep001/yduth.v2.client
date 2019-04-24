@@ -16,9 +16,16 @@ export class PhotoPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log('PhotoPage');
     this.photo = this.router.snapshot.paramMap.get('photo');
   }
 
-  closePhoto(): void {
+  showPhoto(): string {
+    if (this.photo == null || this.photo === '' || this.photo === undefined) {
+      return 'assets/img/google_default_photo.jpg';
+    } else {
+      return this.photo;
+    }
   }
+
 }

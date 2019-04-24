@@ -46,36 +46,12 @@ export class AuthService {
     return this.existUser ? this.user_.email : null;
   }
 
-  get googleDisplayName(): string {
-    return this.existUser ? this.user_.googleDisplayName : null;
-  }
-
-  get googlePhotoUrl(): string {
-    return this.existUser ? this.user_.googlePhotoUrl : null;
-  }
-
   get nickname(): string {
     return this.existUser ? this.user_.nickname : null;
   }
 
   get photo(): string {
     return this.existUser ? this.user_.photo : null;
-  }
-
-  get createDate(): string {
-    return this.existUser ? this.user_.createDate : null;
-  }
-
-  get updateDate(): string {
-    return this.existUser ? this.user_.updateDate : null;
-  }
-
-  get isUsed(): boolean {
-    return this.existUser ? this.user_.isUsed : false;
-  }
-
-  get roleId(): number {
-    return this.existUser ? this.user_.roleId : 0;
   }
 
   getFireAuth(): firebase.auth.Auth {
@@ -141,6 +117,27 @@ export class AuthService {
     }
 
     const idToken: string = await this.afAuth.auth.currentUser.getIdToken(true);
+    const resDate = new ResponseDate(
+      await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise() as ResponseDate);
+
+    if (resDate.res) {
+      this.user_ = resDate.data as User;
+    } else {
+      this.signOut();
+      this.presentToast(resDate.toErrString());
+    }
+
+    return this.user_;
+  }
+
+  async updateSignInInfoForDevApp(): Promise<User> {
+
+    let idToken = await fetch(environment.devAppTestFilePath).then(async response => {
+      return await response.json().then(data => idToken = data.idToken);
+    });
+
     const resDate = new ResponseDate(
       await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
         headers: new HttpHeaders().set('Authorization', idToken)

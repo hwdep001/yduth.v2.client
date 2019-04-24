@@ -13,16 +13,16 @@
 
   <ion-item lines="none">
     <ion-avatar slot="start" class="cursor" (click)="closeMenu()"
-        [routerLink]="[pageInfo.photo.url, user.photo]" routerDirection="forward">
+      [routerLink]="[pageInfo.photo.url, user.photo ? user.photo : '']" routerDirection="forward">
       <img [src]="user.photo ? user.photo : 'assets/img/google_default_photo.jpg'">
     </ion-avatar>
   </ion-item>
   
   <ion-list-header></ion-list-header>
-  <ion-item *ngIf="user">
+  <ion-item>
     {{user.uid}}
   </ion-item>
-  <ion-item *ngIf="user">
+  <ion-item>
     {{user.email}}
   </ion-item>
 
@@ -30,4 +30,5 @@
   <ion-item>
     <ion-button expand="block" color="danger" (click)="signOut()">Sign Out</ion-button>
   </ion-item>
+
 </ion-content>

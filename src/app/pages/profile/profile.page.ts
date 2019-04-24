@@ -22,8 +22,7 @@ export class ProfilePage implements OnInit {
   ) {
     this.pageInfo = environment.pageInfo;
     if (this._auth.user != null) {
-      this.user.uid = this._auth.uid;
-      this.user.email = this._auth.email;
+      this.user = this._auth.user;
     }
   }
 
