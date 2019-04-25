@@ -54,3 +54,8 @@
 ion-list-header{
   --background: var(--custom-color-lightgray);
 }
+
+// user-select
+.user-select {
+  user-select: text;
+}

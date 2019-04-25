@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Platform, ToastController, LoadingController } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 
 import { environment } from 'src/environments/environment';
 
@@ -8,7 +8,9 @@ import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
-import { ResponseDate } from './../models/ResponseData';
+import { CommonService } from './common.service';
+
+import { ResponseData } from './../models/ResponseData';
 import { User } from './../models/User';
 
 @Injectable({
@@ -22,13 +24,13 @@ export class AuthService {
   constructor(
     private platform: Platform,
     private http: HttpClient,
-    private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private gplus: GooglePlus,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private _cmn: CommonService
   ) {
     this.apiServerUrl = environment.apiServerUrl;
-   }
+  }
 
   get user(): User {
     return this.user_;
@@ -56,6 +58,10 @@ export class AuthService {
 
   getFireAuth(): firebase.auth.Auth {
     return this.afAuth.auth;
+  }
+
+  async getIdToken(): Promise<string> {
+    return await this.getFireAuth().currentUser.getIdToken(true);
   }
 
   async signIn() {
@@ -117,16 +123,16 @@ export class AuthService {
     }
 
     const idToken: string = await this.afAuth.auth.currentUser.getIdToken(true);
-    const resDate = new ResponseDate(
+    const rd = new ResponseData(
       await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
         headers: new HttpHeaders().set('Authorization', idToken)
-    }).toPromise() as ResponseDate);
+    }).toPromise() as ResponseData);
 
-    if (resDate.res) {
-      this.user_ = resDate.data as User;
+    if (rd.res) {
+      this.user_ = rd.data as User;
     } else {
       this.signOut();
-      this.presentToast(resDate.toErrString());
+      this._cmn.presentErrToast(rd.toErrString());
     }
 
     return this.user_;
@@ -138,16 +144,16 @@ export class AuthService {
       return await response.json().then(data => idToken = data.idToken);
     });
 
-    const resDate = new ResponseDate(
+    const rd = new ResponseData(
       await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
         headers: new HttpHeaders().set('Authorization', idToken)
-    }).toPromise() as ResponseDate);
+    }).toPromise() as ResponseData);
 
-    if (resDate.res) {
-      this.user_ = resDate.data as User;
+    if (rd.res) {
+      this.user_ = rd.data as User;
     } else {
       this.signOut();
-      this.presentToast(resDate.toErrString());
+      this._cmn.presentErrToast(rd.toErrString());
     }
 
     return this.user_;
@@ -161,19 +167,6 @@ export class AuthService {
     }
 
     this.afAuth.auth.signOut();
-  }
-
-  async presentToast(message: string) {
-    const toast = await this.toastCtrl.create({
-      message: message,
-      position: 'bottom',
-      color: 'danger',
-      showCloseButton: true,
-      closeButtonText: 'Close',
-      animated: true,
-      translucent: true
-    });
-    toast.present();
   }
 
   async getLoading(message?: string, duration?: number, backdropDismiss?: boolean): Promise<HTMLIonLoadingElement> {

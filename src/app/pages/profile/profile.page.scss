@@ -1,6 +1,17 @@
 ion-content {
+  --background: var(--custom-color-lightgray);
+
   ion-list-header {
     max-height: 15px;
     min-height: 15px;
+  }
+
+  ion-item {
+    ion-note {
+      margin-left: 10px;
+      padding-left: 0px;
+      padding-top: 14px;
+      font-size: 16px;
+    }
   }
 }

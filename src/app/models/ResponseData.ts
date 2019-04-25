@@ -1,14 +1,14 @@
-export class ResponseDate {
+export class ResponseData {
     res: boolean;
     code: number;
     msg: String;
     data: any;
 
-    constructor(data: Partial<ResponseDate>) {
+    constructor(data: Partial<ResponseData>) {
         Object.assign(this, data);
     }
 
     toErrString(): string {
-        return `${this.code}: ${this.msg}`;
+        return `CODE: ${this.code} - ${this.msg}`;
     }
 }
