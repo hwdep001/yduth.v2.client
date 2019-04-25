@@ -27,8 +27,16 @@
   </ion-item>
 
   <ion-list-header></ion-list-header>
-  <ion-item>
-    <ion-button expand="block" color="danger" (click)="signOut()">Sign Out</ion-button>
+  <ion-item (click)="signOut()">
+    <ion-label>
+      회원탈퇴
+    </ion-label>
+    <ion-icon name="trash" slot="end" color="danger"></ion-icon>
   </ion-item>
-
+  <ion-item (click)="signOut()">
+    <ion-label>
+      로그아웃
+    </ion-label>
+    <ion-icon name="log-out" slot="end" color="primary"></ion-icon>
+  </ion-item>
 </ion-content>

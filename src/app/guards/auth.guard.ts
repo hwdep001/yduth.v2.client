@@ -62,24 +62,28 @@ export class AuthGuard implements CanActivate {
         if (user) {
           // 조건1
           if (state.url === this.pageInfo.signIn.url) {
-            // console.log(`[auth guard] ${state.url} - false -> home`);
+            // console.log(`[auth guard1] ${state.url} - false -> home`);
+            // alert(`[auth guard1] ${state.url} - false -> home`);
             this.router.navigate([this.pageInfo.home.url]);
             resolve(false);
           } else {
           // 조건 2
-            // console.log(`[auth guard] ${state.url} - true`);
+            // console.log(`[auth guard2] ${state.url} - true`);
+            // alert(`[auth guard2] ${state.url} - true`);
             this.events.publish('menu-setting', user);
             resolve(true);
           }
         } else {
           // 조건 3
           if (state.url === this.pageInfo.signIn.url) {
-            // console.log(`[auth guard] ${state.url} - true`);
+            // console.log(`[auth guard3] ${state.url} - true`);
+            // alert(`[auth guard3] ${state.url} - true`);
             this.events.publish('menu-setting', user);
             resolve(true);
           } else {
           // 조건 4
-            // console.log(`[auth guard] ${state.url} - false -> sign-in`);
+            // console.log(`[auth guard4] ${state.url} - false -> sign-in`);
+            // alert(`[auth guard4] ${state.url} - false -> sign-in`);
             state.url = this.pageInfo.signIn.url;   // 로그인 화면에서 뒤로가기 방지용
             this.router.navigate([this.pageInfo.signIn.url]);
             resolve(false);
@@ -105,24 +109,28 @@ export class AuthGuard implements CanActivate {
       if (user) {
         // 조건1
         if (state.url === this.pageInfo.signIn.url) {
-          // console.log(`[auth guard] ${state.url} - false -> home`);
+          // console.log(`[auth guard1] ${state.url} - false -> home`);
+          // alert(`[auth guard1] ${state.url} - false -> home`);
           this.router.navigate([this.pageInfo.home.url]);
           resolve(false);
         } else {
         // 조건 2
-          // console.log(`[auth guard] ${state.url} - true`);
+          // console.log(`[auth guard2] ${state.url} - true`);
+          // alert(`[auth guard2] ${state.url} - true`);
           this.events.publish('menu-setting', user);
           resolve(true);
         }
       } else {
         // 조건 3
         if (state.url === this.pageInfo.signIn.url) {
-          // console.log(`[auth guard] ${state.url} - true`);
+          // console.log(`[auth guard3] ${state.url} - true`);
+          // alert(`[auth guard3] ${state.url} - true`);
           this.events.publish('menu-setting', user);
           resolve(true);
         } else {
         // 조건 4
-          // console.log(`[auth guard] ${state.url} - false -> sign-in`);
+          // console.log(`[auth guard4] ${state.url} - false -> sign-in`);
+          // alert(`[auth guard4] ${state.url} - false -> sign-in`);
           state.url = this.pageInfo.signIn.url;   // 로그인 화면에서 뒤로가기 방지용
           this.router.navigate([this.pageInfo.signIn.url]);
           resolve(false);

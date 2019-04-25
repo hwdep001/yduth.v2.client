@@ -52,6 +52,8 @@ export class AppComponent {
   }
 
   async initializeApp(): Promise<any> {
+    this.subscribeMenuSetting();
+
     await this.platform.ready().then(() => {
 
       // alert('platform: ' + this.platform.platforms().toString());
@@ -63,7 +65,6 @@ export class AppComponent {
 
       this.subscribeBackButton();
       this.subscribeActiveMenu();
-      this.subscribeMenuSetting();
     });
   }
 
@@ -80,8 +81,8 @@ export class AppComponent {
 
   subscribeMenuSetting(): void {
     this.events.subscribe('menu-setting', (user: User) => {
-      this.hideSplashScreen();
       this.setMenus(user);
+      this.hideSplashScreen();
     });
   }
 
