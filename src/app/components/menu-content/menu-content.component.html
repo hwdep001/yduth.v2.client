@@ -1,9 +1,9 @@
 <ion-list *ngFor="let m of menus">
   <ion-list-header>
-    {{m.title}}
+    <ion-note>{{m.title}}</ion-note>
   </ion-list-header>
   <ion-menu-toggle auto-hide="false" *ngFor="let p of m.pages">
-    <ion-item [routerDirection]="'root'" [routerLink]="[p.url]" [class.active-item]="p.active">
+    <ion-item lines="none" [routerDirection]="'root'" [routerLink]="[p.url]" [class.active-item]="p.active">
       <ion-icon slot="start" [name]="p.icon"></ion-icon>
       <ion-label>{{p.title}}</ion-label>
     </ion-item>

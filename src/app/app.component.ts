@@ -106,12 +106,12 @@ export class AppComponent {
       pages.push(this.pagesMap.get('home'));
       pages.push(this.pagesMap.get('cat-list'));
       pages.push(this.pagesMap.get('group-list'));
-      menus.push({ title: 'Menu', pages: pages});
+      menus.push({ title: '메뉴', pages: pages});
 
       pages = [];
       pages.push(this.pagesMap.get('profile'));
       pages.push(this.pagesMap.get('temp'));
-      menus.push({ title: 'Setting', pages: pages});
+      menus.push({ title: '설정', pages: pages});
 
       this.menus = menus;
       this.menuDisabled = false;
