@@ -44,7 +44,7 @@ export class AppComponent {
     const p = environment.pageInfo;
     const pagesMap = new Map<string, PageInterface>();
     pagesMap.set('home', { title: '홈', url: p.home.url, icon: 'home' });
-    pagesMap.set('cat-list', { title: '단어장', url: p.catList.url, icon: 'book' });
+    pagesMap.set('cat-list', { title: '단어장', url: p.catList.url, icon: 'pricetags' });
     pagesMap.set('group-list', { title: '그룹', url: p.groupList.url, icon: 'people' });
     pagesMap.set('profile', { title: '프로필', url: p.profile.url, icon: 'person' });
     pagesMap.set('temp', { title: 'temp', url: p.temp.url, icon: 'settings' });

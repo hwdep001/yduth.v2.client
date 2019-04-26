@@ -56,6 +56,10 @@ export class AuthService {
     return this.existUser ? this.user_.photo : null;
   }
 
+  set user(user: User) {
+    this.user_ =  user;
+  }
+
   getFireAuth(): firebase.auth.Auth {
     return this.afAuth.auth;
   }
@@ -75,9 +79,6 @@ export class AuthService {
     } else {
       promises.push(await this.webGoogleLogin());
     }
-
-    // test login for devapp
-    // promises.push(await this.webGoogleLogin());
 
     Promise.all(promises)
       .catch(err => {
