@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { ToastOptions } from '@ionic/core';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +36,16 @@ export class CommonService {
       translucent: true
     });
     toast.present();
+  }
+
+  async getLoading(message?: string, duration?: number): Promise<HTMLIonLoadingElement> {
+    return await this.loadingCtrl.create({
+      spinner: 'bubbles',
+      message: (message == null ? 'Loading...' : message),
+      animated: true,
+      translucent: true,
+      duration: (duration == null ? 20000 : duration)
+    });
   }
 
 }

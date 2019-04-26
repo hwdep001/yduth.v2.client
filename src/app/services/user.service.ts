@@ -45,6 +45,29 @@ export class UserService {
     return rd;
   }
 
+  async updatePhoto(uid: string, photo: string): Promise<ResponseData> {
+
+    const idToken: string = await this._auth.getIdToken();
+    let rd = new ResponseData({});
+
+    const data = {
+      uid: uid,
+      photo: photo
+    };
+
+    await this.http.patch(`${this.apiServerUrl}/user/photo`, data, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
+
+    return rd;
+  }
+
   async withdraw(): Promise<ResponseData> {
 
     const idToken: string = await this._auth.getIdToken();

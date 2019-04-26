@@ -48,6 +48,10 @@ export class AuthService {
     return this.existUser ? this.user_.email : null;
   }
 
+  get googlePhotoUrl(): string {
+    return this.existUser ? this.user_.googlePhotoUrl : null;
+  }
+
   get nickname(): string {
     return this.existUser ? this.user_.nickname : null;
   }
@@ -170,15 +174,15 @@ export class AuthService {
     this.afAuth.auth.signOut();
   }
 
-  async getLoading(message?: string, duration?: number, backdropDismiss?: boolean): Promise<HTMLIonLoadingElement> {
+  async getLoading(): Promise<HTMLIonLoadingElement> {
     return await this.loadingCtrl.create({
       spinner: 'bubbles',
-      message: (message == null ? 'Loading...' : message),
+      message: 'Loading...',
       animated: true,
       translucent: true,
       showBackdrop: true,
-      backdropDismiss: (backdropDismiss == null ? false : true),
-      duration: (duration == null ? 0 : duration)
+      backdropDismiss: false,
+      duration: 20000
     });
   }
 

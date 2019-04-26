@@ -51,14 +51,10 @@ export class ProfilePage implements OnInit {
     this._auth.signOut();
   }
 
-  updatePhoto() {
-
-    this.presentActionSheet();
-  }
-
   async updateNickname() {
 
     if (this.newNickname.length < 2 || this.newNickname.length > 12) {
+      alert('2~12자 사이로 입력해주세요.');
       return;
     }
 
@@ -67,14 +63,18 @@ export class ProfilePage implements OnInit {
       return;
     }
 
+    const loading = await this._cmn.getLoading();
+    loading.present();
     const rd: ResponseData = await this._user.updateNickname(this.user.uid, this.newNickname);
 
     if (rd.res) {
-      this._cmn.presentSucToast('저장');
       this.user.nickname = this.newNickname;
       this._auth.user = this.user;
       this.nicknameDisabled = true;
+      loading.dismiss();
+      this._cmn.presentSucToast('저장');
     } else {
+      loading.dismiss();
       if (rd.code === 1104 || rd.code === 1105) {
         alert(rd.msg);
       } else {
@@ -86,6 +86,63 @@ export class ProfilePage implements OnInit {
   cancelNinkname() {
     this.newNickname = this.user.nickname;
     this.nicknameDisabled = true;
+  }
+
+  async presentPhotoAs() {
+    const actionSheet = await this.asCtrl.create({
+      header: '사진 변경',
+      buttons: [
+      {
+        text: '사진 촬영',
+        icon: 'camera',
+        handler: () => {
+          alert('준비 중');
+        }
+      }, {
+        text: '앨범에서 사진 선택',
+        icon: 'images',
+        handler: () => {
+          alert('준비 중');
+        }
+      }, {
+        text: 'Google 프로필 사진으로 변경',
+        icon: 'logo-googleplus',
+        handler: async () => {
+          this.updatePhoto(this.user.googlePhotoUrl);
+        }
+      }, {
+        text: '기본 사진으로 변경',
+        icon: 'trash',
+        handler: async () => {
+          this.updatePhoto(null);
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+
+    return await actionSheet.present();
+  }
+
+  private async updatePhoto(photo: string) {
+    const loading = await this._cmn.getLoading();
+    loading.present();
+    const rd = await this._user.updatePhoto(this.user.uid, photo);
+
+    if (rd.res) {
+      this.user.photo = photo;
+      this._auth.user = this.user;
+      loading.dismiss();
+      this._cmn.presentSucToast('저장');
+    } else {
+      loading.dismiss();
+      this._cmn.presentErrToast(rd.toErrString());
+    }
   }
 
   withdraw() {
@@ -101,7 +158,7 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  async getWithdrawAlert(withdrawHandler: any) {
+  private async getWithdrawAlert(withdrawHandler: any) {
     const alert = await this.alertCtrl.create({
       header: '회원 탈퇴',
       message: '탈퇴하시겠습니까?',
@@ -119,46 +176,6 @@ export class ProfilePage implements OnInit {
     });
 
     return await alert.present();
-  }
-
-  async presentActionSheet() {
-    const actionSheet = await this.asCtrl.create({
-      header: '사진 변경',
-      buttons: [
-      {
-        text: '사진 촬영',
-        icon: 'camera',
-        handler: () => {
-          console.log('사진 촬영 clicked');
-        }
-      }, {
-        text: '앨범에서 사진 선택',
-        icon: 'images',
-        handler: () => {
-          console.log('앨범에서 사진 선택 clicked');
-        }
-      }, {
-        text: 'Google 프로필로 변경',
-        icon: 'logo-googleplus',
-        handler: () => {
-          console.log('Google 프로필로 변경 clicked');
-        }
-      }, {
-        text: '기본 이미지로 변경',
-        icon: 'trash',
-        handler: () => {
-          console.log('기본 이미지로 변경 clicked');
-        }
-      }, {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-          console.log('Cancel clicked');
-        }
-      }]
-    });
-    await actionSheet.present();
   }
 
 }
