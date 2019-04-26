@@ -181,7 +181,7 @@ export class AuthService {
       animated: true,
       translucent: true,
       showBackdrop: true,
-      backdropDismiss: false,
+      backdropDismiss: true,
       duration: 20000
     });
   }
