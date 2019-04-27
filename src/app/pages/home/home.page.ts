@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { ToastController, AlertController } from '@ionic/angular';
 
 import { environment } from 'src/environments/environment';
-import { AuthService } from './../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -17,8 +15,6 @@ export class HomePage implements OnInit {
 
   constructor(
     private toastCtrl: ToastController,
-    private http: HttpClient,
-    private _auth: AuthService,
     private alertController: AlertController
   ) { }
 
@@ -30,7 +26,7 @@ export class HomePage implements OnInit {
 
   async presentToastWithOptions(message: string) {
     const toast = await this.toastCtrl.create({
-      message: message,
+      message,
       position: 'middle',
       color: 'danger',
       showCloseButton: true,

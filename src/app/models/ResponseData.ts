@@ -1,7 +1,7 @@
 export class ResponseData {
     res: boolean;
     code: number;
-    msg: String;
+    msg: string;
     data: any;
 
     constructor(data: Partial<ResponseData>) {

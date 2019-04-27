@@ -17,19 +17,19 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    private _auth: AuthService
+    private authService: AuthService
   ) {
     this.apiServerUrl = environment.apiServerUrl;
   }
 
   async updateNickname(uid: string, nickname: string): Promise<ResponseData> {
 
-    const idToken: string = await this._auth.getIdToken();
+    const idToken: string = await this.authService.getIdToken();
     let rd = new ResponseData({});
 
     const data = {
-      uid: uid,
-      nickname: nickname
+      uid,
+      nickname
     };
 
     await this.http.patch(`${this.apiServerUrl}/user/nickname`, data, {
@@ -47,12 +47,12 @@ export class UserService {
 
   async updatePhoto(uid: string, photo: string): Promise<ResponseData> {
 
-    const idToken: string = await this._auth.getIdToken();
+    const idToken: string = await this.authService.getIdToken();
     let rd = new ResponseData({});
 
     const data = {
-      uid: uid,
-      photo: photo
+      uid,
+      photo
     };
 
     await this.http.patch(`${this.apiServerUrl}/user/photo`, data, {
@@ -70,7 +70,7 @@ export class UserService {
 
   async withdraw(): Promise<ResponseData> {
 
-    const idToken: string = await this._auth.getIdToken();
+    const idToken: string = await this.authService.getIdToken();
     let rd = new ResponseData({});
 
     await this.http.delete(`${this.apiServerUrl}/user/withdraw`, {

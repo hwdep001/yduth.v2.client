@@ -73,7 +73,7 @@ export class AppComponent {
       if (event instanceof NavigationEnd) {
         this.pagesMap.forEach( (p, key) => {
           const activeUrl = '/' + event.url.split('/')[1];
-          return p['active'] = (activeUrl === p.url || event.url === '/' && p.url === '/home');
+          return p['active'.toString()] = (activeUrl === p.url || event.url === '/' && p.url === '/home');
         });
       }
     });
@@ -106,12 +106,12 @@ export class AppComponent {
       pages.push(this.pagesMap.get('home'));
       pages.push(this.pagesMap.get('cat-list'));
       pages.push(this.pagesMap.get('group-list'));
-      menus.push({ title: '메뉴', pages: pages});
+      menus.push({ title: '메뉴', pages});
 
       pages = [];
       pages.push(this.pagesMap.get('profile'));
       pages.push(this.pagesMap.get('temp'));
-      menus.push({ title: '설정', pages: pages});
+      menus.push({ title: '설정', pages});
 
       this.menus = menus;
       this.menuDisabled = false;
@@ -166,7 +166,7 @@ export class AppComponent {
       // }
 
       if (this.router.url === '/sign-in') {
-        navigator['app'].exitApp();
+        navigator['app'.toString()].exitApp();
       } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
         this.routerOutlet.pop();
       } else {
@@ -190,7 +190,7 @@ export class AppComponent {
         }, {
           text: 'Exit',
           handler: () => {
-            navigator['app'].exitApp();
+            navigator['app'.toString()].exitApp();
           }
         }
       ]

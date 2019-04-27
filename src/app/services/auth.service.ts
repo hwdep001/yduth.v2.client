@@ -19,7 +19,7 @@ import { User } from './../models/User';
 export class AuthService {
 
   private apiServerUrl: string;
-  private user_: User = null;
+  private userInfo: User = null;
 
   constructor(
     private platform: Platform,
@@ -27,41 +27,41 @@ export class AuthService {
     private loadingCtrl: LoadingController,
     private gplus: GooglePlus,
     private afAuth: AngularFireAuth,
-    private _cmn: CommonService
+    private cmnService: CommonService
   ) {
     this.apiServerUrl = environment.apiServerUrl;
   }
 
   get user(): User {
-    return this.user_;
+    return this.userInfo;
   }
 
   get existUser(): boolean {
-    return this.user_ == null ? false : true;
+    return this.userInfo == null ? false : true;
   }
 
   get uid(): string {
-    return this.existUser ? this.user_.uid : null;
+    return this.existUser ? this.userInfo.uid : null;
   }
 
   get email(): string {
-    return this.existUser ? this.user_.email : null;
+    return this.existUser ? this.userInfo.email : null;
   }
 
   get googlePhotoUrl(): string {
-    return this.existUser ? this.user_.googlePhotoUrl : null;
+    return this.existUser ? this.userInfo.googlePhotoUrl : null;
   }
 
   get nickname(): string {
-    return this.existUser ? this.user_.nickname : null;
+    return this.existUser ? this.userInfo.nickname : null;
   }
 
   get photo(): string {
-    return this.existUser ? this.user_.photo : null;
+    return this.existUser ? this.userInfo.photo : null;
   }
 
-  set user(user: User) {
-    this.user_ =  user;
+  setUser(user: User) {
+    this.userInfo =  user;
   }
 
   getFireAuth(): firebase.auth.Auth {
@@ -126,9 +126,9 @@ export class AuthService {
 
   getGoogleLoginOptions()  {
     return {
-      'webClientId': environment.webClientId,
-      'offline': false,
-      'scopes': 'profile email'
+      webClientId: environment.webClientId,
+      offline: false,
+      scopes: 'profile email'
     };
   }
 
@@ -145,17 +145,17 @@ export class AuthService {
     }).toPromise() as ResponseData);
 
     if (rd.res) {
-      this.user_ = rd.data as User;
+      this.userInfo = rd.data as User;
     } else {
       this.signOut();
-      this._cmn.presentErrToast(rd.toErrString());
+      this.cmnService.presentErrToast(rd.toErrString());
     }
 
-    return this.user_;
+    return this.userInfo;
   }
 
   async signOut() {
-    this.user_ = null;
+    this.userInfo = null;
 
     if (this.platform.is('cordova')) {
       await this.gplus.disconnect();

@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private events: Events,
-    private _auth: AuthService
+    private authService: AuthService
   ) {}
 
   canActivate(
@@ -46,17 +46,17 @@ export class AuthGuard implements CanActivate {
         this.isSubscription = false;
       }
 
-      this.unsubscribe = this._auth.getFireAuth().onAuthStateChanged(async (fireUser: firebase.User) => {
+      this.unsubscribe = this.authService.getFireAuth().onAuthStateChanged(async (fireUser: firebase.User) => {
         // console.log('[auth guard] onAuthStateChanged: ' + fireUser);
         this.isSubscription = true;
 
         /**
          * user가 null인데 firebase가 로그인 상태이면 로그인 처리
          */
-        if (fireUser != null && this._auth.user == null) {
-          await this._auth.updateSignInInfo();
+        if (fireUser != null && this.authService.user == null) {
+          await this.authService.updateSignInInfo();
         }
-        const user: User = this._auth.user;
+        const user: User = this.authService.user;
 
         /**
          * 로그인 했을 경우 /sign-in 접근 시 home으로 이동
@@ -102,8 +102,8 @@ export class AuthGuard implements CanActivate {
   ): boolean | Observable<boolean> | Promise<boolean> {
     return  new Promise(async (resolve, reject) => {
 
-      await this._auth.updateSignInInfo();
-      const user: User = this._auth.user;
+      await this.authService.updateSignInInfo();
+      const user: User = this.authService.user;
 
       /**
        * 로그인 했을 경우 /sign-in 접근 시 home으로 이동

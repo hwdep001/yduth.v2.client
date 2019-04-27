@@ -13,7 +13,7 @@ export class CommonService {
 
   async presentSucToast(message: string) {
     const toast = await this.toastCtrl.create({
-      message: message,
+      message,
       position: 'bottom',
       color: 'primary',
       duration: 2000,
@@ -27,7 +27,7 @@ export class CommonService {
 
   async presentErrToast(message: string) {
     const toast = await this.toastCtrl.create({
-      message: message,
+      message,
       position: 'bottom',
       color: 'danger',
       showCloseButton: true,

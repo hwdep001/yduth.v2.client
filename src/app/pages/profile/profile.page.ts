@@ -27,14 +27,14 @@ export class ProfilePage implements OnInit {
     public menuCtrl: MenuController,
     private alertCtrl: AlertController,
     private asCtrl: ActionSheetController,
-    private _cmn: CommonService,
-    private _auth: AuthService,
-    private _user: UserService
+    private cmnService: CommonService,
+    private authService: AuthService,
+    private userService: UserService
   ) {
     this.pageInfo = environment.pageInfo;
     this.nicknameDisabled = true;
-    if (this._auth.user != null) {
-      this.user = this._auth.user;
+    if (this.authService.user != null) {
+      this.user = this.authService.user;
       this.newNickname = this.user.nickname;
     }
   }
@@ -48,7 +48,7 @@ export class ProfilePage implements OnInit {
   }
 
   signOut() {
-    this._auth.signOut();
+    this.authService.signOut();
   }
 
   async updateNickname() {
@@ -63,22 +63,22 @@ export class ProfilePage implements OnInit {
       return;
     }
 
-    const loading = await this._cmn.getLoading();
+    const loading = await this.cmnService.getLoading();
     loading.present();
-    const rd: ResponseData = await this._user.updateNickname(this.user.uid, this.newNickname);
+    const rd: ResponseData = await this.userService.updateNickname(this.user.uid, this.newNickname);
 
     if (rd.res) {
       this.user.nickname = this.newNickname;
-      this._auth.user = this.user;
+      this.authService.setUser(this.user);
       this.nicknameDisabled = true;
       loading.dismiss();
-      this._cmn.presentSucToast('저장');
+      this.cmnService.presentSucToast('저장');
     } else {
       loading.dismiss();
       if (rd.code === 1104 || rd.code === 1105) {
         alert(rd.msg);
       } else {
-        this._cmn.presentErrToast(rd.toErrString());
+        this.cmnService.presentErrToast(rd.toErrString());
       }
     }
   }
@@ -130,29 +130,29 @@ export class ProfilePage implements OnInit {
   }
 
   private async updatePhoto(photo: string) {
-    const loading = await this._cmn.getLoading();
+    const loading = await this.cmnService.getLoading();
     loading.present();
-    const rd = await this._user.updatePhoto(this.user.uid, photo);
+    const rd = await this.userService.updatePhoto(this.user.uid, photo);
 
     if (rd.res) {
       this.user.photo = photo;
-      this._auth.user = this.user;
+      this.authService.setUser(this.user);
       loading.dismiss();
-      this._cmn.presentSucToast('저장');
+      this.cmnService.presentSucToast('저장');
     } else {
       loading.dismiss();
-      this._cmn.presentErrToast(rd.toErrString());
+      this.cmnService.presentErrToast(rd.toErrString());
     }
   }
 
   withdraw() {
     this.getWithdrawAlert(() => {
-      this._user.withdraw().then((rd: ResponseData) => {
+      this.userService.withdraw().then((rd: ResponseData) => {
         if (rd.res) {
-          this._auth.signOut();
-          this._cmn.presentSucToast('탈퇴 성공');
+          this.authService.signOut();
+          this.cmnService.presentSucToast('탈퇴 성공');
         } else {
-          this._cmn.presentErrToast(rd.toErrString());
+          this.cmnService.presentErrToast(rd.toErrString());
         }
       });
     });

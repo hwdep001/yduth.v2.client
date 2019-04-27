@@ -10,7 +10,7 @@ import { AuthService } from './../../services/auth.service';
 export class SignInPage implements OnInit {
 
   constructor(
-    private _auth: AuthService
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -18,7 +18,7 @@ export class SignInPage implements OnInit {
   }
 
   signIn() {
-    this._auth.signIn();
+    this.authService.signIn();
   }
 
 }
