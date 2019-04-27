@@ -69,7 +69,18 @@ export class AuthService {
   }
 
   async getIdToken(): Promise<string> {
-    return await this.getFireAuth().currentUser.getIdToken(true);
+
+    let idToken;
+
+    if (environment.devAppTest) {
+      idToken = await fetch(environment.devAppTestFilePath).then(async response => {
+        return await response.json().then(data => idToken = data.idToken);
+      });
+    } else {
+      idToken = await this.getFireAuth().currentUser.getIdToken(true);
+    }
+
+    return idToken;
   }
 
   async signIn() {
@@ -127,28 +138,7 @@ export class AuthService {
       this.googleTrySilentLogin();
     }
 
-    const idToken: string = await this.afAuth.auth.currentUser.getIdToken(true);
-    const rd = new ResponseData(
-      await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
-        headers: new HttpHeaders().set('Authorization', idToken)
-    }).toPromise() as ResponseData);
-
-    if (rd.res) {
-      this.user_ = rd.data as User;
-    } else {
-      this.signOut();
-      this._cmn.presentErrToast(rd.toErrString());
-    }
-
-    return this.user_;
-  }
-
-  async updateSignInInfoForDevApp(): Promise<User> {
-
-    let idToken = await fetch(environment.devAppTestFilePath).then(async response => {
-      return await response.json().then(data => idToken = data.idToken);
-    });
-
+    const idToken: string = await this.getIdToken();
     const rd = new ResponseData(
       await this.http.post(`${this.apiServerUrl}/sign-in-up`, null, {
         headers: new HttpHeaders().set('Authorization', idToken)

@@ -28,8 +28,11 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> | Promise<boolean> {
-    // return this.canActivateForDevApp(next, state);   // for dev app
-    return this.canActivateForApp(next, state);
+    if (environment.devAppTest) {
+      return this.canActivateForDevApp(next, state);   // for dev app
+    } else {
+      return this.canActivateForApp(next, state);
+    }
   }
 
   canActivateForApp(
@@ -99,7 +102,7 @@ export class AuthGuard implements CanActivate {
   ): boolean | Observable<boolean> | Promise<boolean> {
     return  new Promise(async (resolve, reject) => {
 
-      await this._auth.updateSignInInfoForDevApp();
+      await this._auth.updateSignInInfo();
       const user: User = this._auth.user;
 
       /**
