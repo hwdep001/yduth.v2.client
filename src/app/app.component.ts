@@ -104,9 +104,18 @@ export class AppComponent {
 
       let pages = [];
       pages.push(this.pagesMap.get('home'));
-      pages.push(this.pagesMap.get('cat-list'));
       pages.push(this.pagesMap.get('group-list'));
       menus.push({ title: '메뉴', pages});
+
+      pages = [];
+      const catPage = this.pagesMap.get('cat-list');
+      for (const sub of user.subList) {
+        const page = Object.assign({}, catPage);
+        page.title = sub.name;
+        page.url = `${page.url}/${sub.id}`;
+        pages.push(page);
+      }
+      menus.push({ title: '단어장', pages});
 
       pages = [];
       pages.push(this.pagesMap.get('profile'));
