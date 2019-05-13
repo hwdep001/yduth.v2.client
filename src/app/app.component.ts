@@ -44,7 +44,13 @@ export class AppComponent {
     const p = environment.pageInfo;
     const pagesMap = new Map<string, PageInterface>();
     pagesMap.set('home', { title: '홈', url: p.home.url, icon: 'home' });
-    pagesMap.set('cat-list', { title: '단어장', url: p.catList.url, icon: 'pricetags' });
+    pagesMap.set('cat-list/sp', { title: '맞춤법', url: `${p.catList.url}/sp`, icon: 'pricetags' });
+    pagesMap.set('cat-list/sl', { title: '표준어', url: `${p.catList.url}/sl`, icon: 'pricetags' });
+    pagesMap.set('cat-list/lw', { title: '외래어', url: `${p.catList.url}/lw`, icon: 'pricetags' });
+    pagesMap.set('cat-list/kw', { title: '어휘', url: `${p.catList.url}/kw`, icon: 'pricetags' });
+    pagesMap.set('cat-list/cc', { title: '한자', url: `${p.catList.url}/cc`, icon: 'pricetags' });
+    pagesMap.set('cat-list/c4', { title: '한자성어', url: `${p.catList.url}/c4`, icon: 'pricetags' });
+    pagesMap.set('cat-list/ew', { title: '영단어', url: `${p.catList.url}/ew`, icon: 'pricetags' });
     pagesMap.set('group-list', { title: '그룹', url: p.groupList.url, icon: 'people' });
     pagesMap.set('profile', { title: '프로필', url: p.profile.url, icon: 'person' });
     pagesMap.set('temp', { title: 'temp', url: p.temp.url, icon: 'settings' });
@@ -72,6 +78,8 @@ export class AppComponent {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         this.pagesMap.forEach( (p, key) => {
+          // console.log('event.url: ' + event.url);
+          // console.log('p.url: ' + p.url);
           const activeUrl = '/' + event.url.split('/')[1];
           return p['active'.toString()] = (activeUrl === p.url || event.url === '/' && p.url === '/home');
         });
@@ -108,11 +116,9 @@ export class AppComponent {
       menus.push({ title: '메뉴', pages});
 
       pages = [];
-      const catPage = this.pagesMap.get('cat-list');
       for (const sub of user.subList) {
-        const page = Object.assign({}, catPage);
-        page.title = sub.name;
-        page.url = `${page.url}/${sub.id}`;
+        const page = this.pagesMap.get(`cat-list/${sub.id}`);
+        page.param = sub;
         pages.push(page);
       }
       menus.push({ title: '단어장', pages});

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
@@ -9,8 +10,17 @@ export class MenuContentComponent implements OnInit {
 
   @Input() menus: MenuInterface;
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {}
+
+  movePage(p: PageInterface) {
+    this.router.navigate([p.url], {
+      queryParams: {data: JSON.stringify(p.param)},
+      skipLocationChange: true
+    });
+  }
 
 }

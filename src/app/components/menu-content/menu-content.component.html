@@ -3,7 +3,7 @@
     <ion-note>{{m.title}}</ion-note>
   </ion-list-header>
   <ion-menu-toggle auto-hide="false" *ngFor="let p of m.pages">
-    <ion-item lines="none" [routerDirection]="'root'" [routerLink]="[p.url]" [class.active-item]="p.active">
+    <ion-item lines="none" class="cursor" [class.active-item]="p.active" (click)="movePage(p)">
       <ion-icon slot="start" [name]="p.icon"></ion-icon>
       <ion-label>{{p.title}}</ion-label>
     </ion-item>
