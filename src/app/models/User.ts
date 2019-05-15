@@ -1,5 +1,3 @@
-import { Sub } from './Sub';
-
 export class User {
     uid: string;
     email: string;
@@ -7,5 +5,5 @@ export class User {
     nickname: string;
     photo: string;
 
-    subList: Array<Sub>;
+    subIdList: Array<string>;
 }

@@ -116,9 +116,9 @@ export class AppComponent {
       menus.push({ title: '메뉴', pages});
 
       pages = [];
-      for (const sub of user.subList) {
-        const page = this.pagesMap.get(`cat-list/${sub.id}`);
-        page.param = sub;
+      for (const subId of user.subIdList) {
+        const page = this.pagesMap.get(`cat-list/${subId}`);
+        // page.param = subId;
         pages.push(page);
       }
       menus.push({ title: '단어장', pages});
