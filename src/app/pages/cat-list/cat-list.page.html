@@ -3,12 +3,17 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
+    <ion-title *ngIf="sub">
       {{sub.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content *ngIf="sub">
+  <ion-list *ngFor="let type1 of sub.type1CatList">
+    <ion-item>{{type1.name}}</ion-item>
+  </ion-list>
+  <ion-list *ngFor="let type0 of sub.type0CatList">
+    <ion-item>{{type0.name}}</ion-item>
+  </ion-list>
 </ion-content>
