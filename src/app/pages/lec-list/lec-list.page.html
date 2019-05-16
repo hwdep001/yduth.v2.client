@@ -3,12 +3,12 @@
     <ion-buttons slot="start" class="side-menu-back-btn">
       <ion-back-button [defaultHref]="pageInfo.catList.path"></ion-back-button>
     </ion-buttons>
-    <ion-title *ngIf="cat">
-      {{cat.name}}
+    <ion-title>
+      {{cat?.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content *ngIf="cat">
+{{cat.sub.name}}
 </ion-content>

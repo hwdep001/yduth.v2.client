@@ -3,17 +3,23 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title *ngIf="sub">
-      {{sub.name}}
+    <ion-title>
+      {{sub?.name}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="sub">
-  <ion-list *ngFor="let cat of sub.type1CatList">
-    <ion-item class="cursor" (click)="moveLecList(cat)">{{cat.name}}</ion-item>
+  <ion-list *ngFor="let cat of sub.type1CatList?.slice().reverse()">
+    <ion-item class="cursor" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
   </ion-list>
   <ion-list *ngFor="let cat of sub.type0CatList">
-    <ion-item class="cursor" (click)="moveLecList(cat)">{{cat.name}}</ion-item>
+    <ion-item class="cursor" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
   </ion-list>
+
+  <ion-fab *ngIf="isFabBtn" vertical="bottom" horizontal="end" slot="fixed" (click)="alertNewType1Cat()">
+    <ion-fab-button size="small" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

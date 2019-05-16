@@ -8,7 +8,6 @@ import { SclwService } from './../../services/sclw.service';
 
 import { Cat } from './../../models/Cat';
 import { Lec } from './../../models/Lec';
-// import { NavParams } from '@ionic/angular';
 
 @Component({
   selector: 'app-lec-list',
@@ -39,8 +38,7 @@ export class LecListPage implements OnInit {
     loading.present();
 
     const catId = this.route.snapshot.params.catId;
-    this.cat = this.route.snapshot.queryParams as Cat;
-    console.log(this.cat);
+    this.cat = JSON.parse(this.route.snapshot.queryParams.data) as Cat;
 
     await this.getLecs(catId)
     .then(() => loading.dismiss())

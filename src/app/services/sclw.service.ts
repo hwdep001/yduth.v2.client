@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 
 import { ResponseData } from '../models/ResponseData';
+import { Cat } from './../models/Cat';
 import { Lec } from './../models/Lec';
 
 @Injectable({
@@ -28,6 +29,26 @@ export class SclwService {
     let rd = new ResponseData({});
 
     await this.http.get(`${this.apiServerUrl}/sub-cats/${subId}`, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
+
+    return rd;
+  }
+
+  async addType1Cat(cat: Cat): Promise<ResponseData> {
+
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
+
+    const data = cat;
+
+    await this.http.put(`${this.apiServerUrl}/type1-cat`, data, {
         headers: new HttpHeaders().set('Authorization', idToken)
     }).toPromise().then(reponse => {
       rd = new ResponseData(reponse);
