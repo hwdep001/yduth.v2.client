@@ -96,38 +96,41 @@ export class CatListPage implements OnInit {
         }
       }, {
         text: '추가',
-        handler: async (alertData) => {
-          let catName = alertData.name;
-
-          if (catName.length > 64) {
-            this.cmnService.presentErrToast('64자 이하로 입력해주세요.');
-            return;
-          } else if (catName === '' || catName == null) {
-            catName = defaultName;
-          }
-
-          const loading = await this.cmnService.getLoading();
-          loading.present();
-
-          const newCat = new Cat();
-          newCat.name = catName;
-          newCat.sub = this.sub;
-
-          const rd = await this.sclwService.addType1Cat(newCat);
-
-          if (rd.res) {
-            this.sub = rd.data as Sub;
-          } else {
-            this.cmnService.presentErrToast(rd.toErrString());
-          }
-
-          loading.dismiss();
-          this.isFabBtn = true;
+        handler: (alertData) => {
+          this.addType1Cat(defaultName, alertData.name)
+            .finally(() => this.isFabBtn = true);
         }
       }]
     });
 
     await alert.present();
+  }
+
+  async addType1Cat(defaultName: string, newName: string): Promise<any> {
+
+    if (newName.length > 64) {
+      this.cmnService.presentErrToast('64자 이하로 입력해주세요.');
+      return;
+    } else if (newName === '' || newName == null) {
+      newName = defaultName;
+    }
+
+    const loading = await this.cmnService.getLoading();
+    loading.present();
+
+    const newCat = new Cat();
+    newCat.name = newName;
+    newCat.sub = this.sub;
+
+    const rd = await this.sclwService.addType1Cat(newCat);
+
+    if (rd.res) {
+      this.sub = rd.data as Sub;
+    } else {
+      this.cmnService.presentErrToast(rd.toErrString());
+    }
+
+    loading.dismiss();
   }
 
 }
