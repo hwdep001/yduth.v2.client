@@ -4,7 +4,7 @@
   </ion-list-header>
   <ion-menu-toggle auto-hide="false" *ngFor="let p of m.pages">
     <ion-item lines="none" [class.active-item]="p.active"
-      [routerDirection]="'root'" [routerLink]="[p.url]" [skipLocationChange]="true">
+      [routerDirection]="'root'" [routerLink]="[p.url]" [skipLocationChange]="skipLocationChange">
       <ion-icon slot="start" [name]="p.icon"></ion-icon>
       <ion-label>{{p.title}}</ion-label>
     </ion-item>

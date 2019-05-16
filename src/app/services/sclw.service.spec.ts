@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SubService } from './sub.service';
+import { SclwService } from './sclw.service';
 
-describe('SubService', () => {
+describe('SclwService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SubService = TestBed.get(SubService);
+    const service: SclwService = TestBed.get(SclwService);
     expect(service).toBeTruthy();
   });
 });

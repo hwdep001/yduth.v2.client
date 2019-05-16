@@ -28,6 +28,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: p.lecList.path,
+    loadChildren: './pages/lec-list/lec-list.module#LecListPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: p.groupList.path,
     loadChildren: './pages/group-list/group-list.module#GroupListPageModule',
     canActivate: [AuthGuard]

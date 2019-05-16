@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { NavigationOptions } from '@ionic/angular/dist/providers/nav-controller';
 
+import { environment } from 'src/environments/environment';
 import { CommonService } from './../../services/common.service';
-import { SubService } from './../../services/sub.service';
+import { SclwService } from './../../services/sclw.service';
 
 import { Sub } from 'src/app/models/Sub';
+import { Cat } from 'src/app/models/Cat';
 
 @Component({
   selector: 'app-cat-list',
@@ -13,18 +17,23 @@ import { Sub } from 'src/app/models/Sub';
 })
 export class CatListPage implements OnInit {
 
+  public pageInfo = environment.pageInfo;
   public sub: Sub;
 
   constructor(
+    private navCtrl: NavController,
+    private router: Router,
     private route: ActivatedRoute,
     private cmnService: CommonService,
-    private subService: SubService
+    private sclwService: SclwService
   ) { }
 
   ngOnInit() {
     console.log('CatListPage');
     this.initData();
   }
+
+  // ionViewWillEnter() { }
 
   async initData() {
     const loading = await this.cmnService.getLoading();
@@ -38,7 +47,7 @@ export class CatListPage implements OnInit {
   }
 
   async getSubWithCats(subId: string): Promise<any> {
-    return await this.subService.getSubWithCats(subId)
+    return await this.sclwService.getSubWithCats(subId)
       .then(rd => {
         if (rd.res) {
           this.sub = rd.data as Sub;
@@ -46,6 +55,19 @@ export class CatListPage implements OnInit {
           alert(rd.toErrString());
         }
       }). catch(err => alert(err));
+  }
+
+  moveLecList(cat: Cat): void {
+    const sub = this.sub;
+    sub.type0CatList = null;
+    sub.type1CatList = null;
+    cat.sub = sub;
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: cat,
+      skipLocationChange: environment.skipLocationChange
+    };
+    this.router.navigate([this.pageInfo.lecList.url, cat.id], navigationExtras);
   }
 
 }

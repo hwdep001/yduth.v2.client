@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, NavigationExtras } from '@angular/router';
 import { Events } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
@@ -106,6 +106,10 @@ export class AuthGuard implements CanActivate {
       await this.authService.updateSignInInfo();
       const user: User = this.authService.user;
 
+      const navigationExtras: NavigationExtras = {
+        skipLocationChange: true, replaceUrl: true
+      };
+
       /**
        * 로그인 했을 경우 /sign-in 접근 시 home으로 이동
        * 로그인 안했을 경우 /sign-in 페이지만 허용
@@ -116,7 +120,7 @@ export class AuthGuard implements CanActivate {
           // console.log(`[auth guard1] ${state.url} - false -> home`);
           // alert(`[auth guard1] ${state.url} - false -> home`);
           await this.zone.run(() => {
-            this.router.navigate([this.pageInfo.home.url, {skipLocationChange: true, replaceUrl: true}]);
+            this.router.navigate([this.pageInfo.home.url, navigationExtras]);
           });
           resolve(false);
         } else {
@@ -139,7 +143,7 @@ export class AuthGuard implements CanActivate {
           // alert(`[auth guard4] ${state.url} - false -> sign-in`);
           state.url = this.pageInfo.signIn.url;   // 로그인 화면에서 뒤로가기 방지용
           await this.zone.run(() => {
-            this.router.navigate([this.pageInfo.signIn.url, {skipLocationChange: true, replaceUrl: true}]);
+            this.router.navigate([this.pageInfo.signIn.url, navigationExtras]);
           });
           resolve(false);
         }

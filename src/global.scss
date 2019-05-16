@@ -50,6 +50,12 @@
   }
 }
 
+// ion-header
+ion-toolbar {
+  --background: #292b2c;
+  color: white;
+}
+
 // ion-list-header
 ion-list-header{
   --background: var(--custom-color-lightgray);
