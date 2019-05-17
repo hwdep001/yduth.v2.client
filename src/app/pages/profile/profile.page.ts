@@ -53,8 +53,10 @@ export class ProfilePage implements OnInit {
 
   async updateNickname() {
 
+    this.newNickname = this.newNickname.trim();
+
     if (this.newNickname.length < 2 || this.newNickname.length > 12) {
-      alert('2~12자 사이로 입력해주세요.');
+      this.presentAlert('2~12자 사이로 입력해주세요.');
       return;
     }
 
@@ -76,7 +78,7 @@ export class ProfilePage implements OnInit {
     } else {
       loading.dismiss();
       if (rd.code === 1104 || rd.code === 1105) {
-        alert(rd.msg);
+        this.presentAlert(rd.msg);
       } else {
         this.cmnService.presentErrToast(rd.toErrString());
       }
@@ -177,5 +179,15 @@ export class ProfilePage implements OnInit {
 
     return await alert.present();
   }
+
+  private async presentAlert(message) {
+    const alert = await this.alertCtrl.create({
+      message,
+      buttons: ['확인']
+    });
+
+    await alert.present();
+  }
+
 
 }

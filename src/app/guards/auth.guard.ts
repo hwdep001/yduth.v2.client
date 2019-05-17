@@ -29,10 +29,12 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> | Promise<boolean> {
-    if (environment.devAppTest) {
+    if (environment.testType === 0) {
+      return this.canActivateForApp(next, state);
+    } else if (environment.testType === 1) {
       return this.canActivateForDevApp(next, state);   // for dev app
     } else {
-      return this.canActivateForApp(next, state);
+      return this.canActivateWithoutGuard(next, state);   // without guard
     }
   }
 
@@ -120,7 +122,7 @@ export class AuthGuard implements CanActivate {
           // console.log(`[auth guard1] ${state.url} - false -> home`);
           // alert(`[auth guard1] ${state.url} - false -> home`);
           await this.zone.run(() => {
-            this.router.navigate([this.pageInfo.home.url, navigationExtras]);
+            this.router.navigate([this.pageInfo.home.url], navigationExtras);
           });
           resolve(false);
         } else {
@@ -143,11 +145,23 @@ export class AuthGuard implements CanActivate {
           // alert(`[auth guard4] ${state.url} - false -> sign-in`);
           state.url = this.pageInfo.signIn.url;   // 로그인 화면에서 뒤로가기 방지용
           await this.zone.run(() => {
-            this.router.navigate([this.pageInfo.signIn.url, navigationExtras]);
+            this.router.navigate([this.pageInfo.signIn.url], navigationExtras);
           });
           resolve(false);
         }
       }
+    });
+  }
+
+  canActivateWithoutGuard(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean | Observable<boolean> | Promise<boolean> {
+    return  new Promise(async (resolve, reject) => {
+      const user: User = environment.testUser as User;
+
+      this.events.publish('menu-setting', user);
+      resolve(true);
     });
   }
 }

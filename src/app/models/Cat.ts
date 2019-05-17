@@ -11,4 +11,7 @@ export class Cat {
     typeId: number;
 
     sub: Sub;
+
+    // for UI
+    checked: boolean;
 }

@@ -1,25 +1,101 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>
-      {{sub?.name}}
-    </ion-title>
+    <ng-container *ngIf="!isSetting">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+        {{sub?.name}}
+      </ion-title>
+      <ion-buttons slot="end" class="toolbar-btn cursor">
+        <ion-icon name="search"></ion-icon>
+      </ion-buttons>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="clickSetting()">
+        <ion-icon name="settings"></ion-icon>
+      </ion-buttons>
+    </ng-container>
+
+    <ng-container *ngIf="isSetting">
+      <ion-buttons slot="start" class="toolbar-back-btn cursor" (click)="cancelSetting()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-buttons>
+      <ion-title>
+        {{sub?.name}}
+      </ion-title>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="clickTrash()">
+        <ion-icon name="trash" color="danger"></ion-icon>
+      </ion-buttons>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="saveSetting()">
+        <ion-icon name="save" color="primary"></ion-icon>
+      </ion-buttons>
+    </ng-container>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="sub">
-  <ion-list *ngFor="let cat of sub.type1CatList?.slice().reverse()">
-    <ion-item class="cursor" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
-  </ion-list>
-  <ion-list *ngFor="let cat of sub.type0CatList">
-    <ion-item class="cursor" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
-  </ion-list>
 
+  <!-- cat list -->
+  <ng-container *ngIf="!isSetting">
+    <ion-list>
+      <ng-container *ngIf="sub.type1CatList.length > 0">
+        <ion-item-divider color="lightgray">
+          <ion-label>
+            내 단어장
+          </ion-label>
+        </ion-item-divider>
+        <ion-item class="cursor" *ngFor="let cat of sub.type1CatList.slice().reverse()" (click)="moveLecListPage(cat)">
+          <ion-label>{{cat.num}} - {{cat.name}}</ion-label>
+        </ion-item>
+      </ng-container>
+
+      <ion-item-divider color="lightgray">
+        <ion-label>
+          기본 단어장
+        </ion-label>
+      </ion-item-divider>
+      <ion-item class="cursor" *ngFor="let cat of sub.type0CatList" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
+    </ion-list>
+  </ng-container>
+
+  <!-- setting page -->
+  <ng-container *ngIf="isSetting">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="col-checkbox">
+          <ion-item lines="none">
+            <ion-checkbox [(ngModel)]="allCheck" (click)="clickAllCheck($event)"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+        <ion-col class="col-reorder">
+          <ion-item>
+            <ion-label>All</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
+        <ion-row *ngFor="let cat of sub.type1CatList.slice().reverse()">
+          <ion-col class="col-checkbox">
+            <ion-item lines="none">
+              <ion-checkbox [(ngModel)]="cat.checked" (click)="clickCatCheck($event, cat)"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+          <ion-col class="col-reorder">
+            <ion-item>
+              <ion-label class="cursor" (click)="alertUpdateName(cat)">{{cat.num}} - {{cat.name}}</ion-label>
+              <ion-reorder></ion-reorder>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-reorder-group>
+    </ion-grid>
+  </ng-container>
+
+  <!-- fab button -->
   <ion-fab *ngIf="isFabBtn" vertical="bottom" horizontal="end" slot="fixed" (click)="alertNewType1Cat()">
     <ion-fab-button size="small" color="primary">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
 </ion-content>

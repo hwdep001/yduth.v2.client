@@ -9,6 +9,7 @@ import { SclwService } from './../../services/sclw.service';
 
 import { Sub } from 'src/app/models/Sub';
 import { Cat } from 'src/app/models/Cat';
+import { deepCopy } from 'src/app/utils/deep-copy';
 
 @Component({
   selector: 'app-cat-list',
@@ -20,8 +21,11 @@ export class CatListPage implements OnInit {
 
   public pageInfo = environment.pageInfo;
   public sub: Sub;
+  public subCopy: Sub;
+  public allCheck: boolean;
 
   public isFabBtn = true;
+  public isSetting = false;
 
   constructor(
     private router: Router,
@@ -39,7 +43,7 @@ export class CatListPage implements OnInit {
 
   // ionViewWillEnter() { }
 
-  async initData() {
+  async initData(): Promise<any> {
     const loading = await this.cmnService.getLoading();
     loading.present();
 
@@ -50,7 +54,7 @@ export class CatListPage implements OnInit {
       .catch(() => loading.dismiss());
   }
 
-  async getSubWithCats(subId: string): Promise<any> {
+  private async getSubWithCats(subId: string): Promise<any> {
     return await this.sclwService.getSubWithCats(subId)
       .then(rd => {
         if (rd.res) {
@@ -77,44 +81,80 @@ export class CatListPage implements OnInit {
     this.router.navigate([this.pageInfo.lecList.url, cat.id], navigationExtras);
   }
 
-  async alertNewType1Cat() {
+  onRenderItems(event): void {
+    const size = this.sub.type1CatList.length - 1;
+    const from = size - event.detail.from;
+    const to = size - event.detail.to;
+
+    const draggedItem = this.sub.type1CatList.splice(from, 1)[0];
+    this.sub.type1CatList.splice(to, 0, draggedItem);
+    event.detail.complete();
+  }
+
+  clickAllCheck(ev) {
+    const checkVal = !ev.target.checked;
+    console.log('all: ' + checkVal);
+    for (const cat of this.sub.type1CatList) {
+      cat.checked = checkVal;
+    }
+  }
+
+  clickCatCheck(ev, cat: Cat) {
+    const checkVal = !ev.target.checked;
+    console.log('cat: ' + checkVal);
+    cat.checked = checkVal;
+
+    let allCheck = true;
+    for (const tempCat of this.sub.type1CatList) {
+      if (!tempCat.checked) {
+        allCheck = false;
+        break;
+      }
+    }
+
+    this.allCheck = allCheck;
+    cat.checked = !checkVal;
+  }
+
+  clickSetting(): void {
+    this.subCopy = <Sub>deepCopy(this.sub);
+    this.isSetting = true;
     this.isFabBtn = false;
+  }
 
-    const defaultName = '단어장 '  + this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+  cancelSetting(): void {
+    this.sub = this.subCopy;
+    this.isSetting = false;
+    this.isFabBtn = true;
+  }
 
+  async saveSetting(): Promise<any> {
     const alert = await this.alertCtrl.create({
-      header: '단어장 추가',
-      inputs: [{
-        name: 'name',
-        value: defaultName
-      }],
-      buttons: [{
-        text: '취소',
-        role: 'cancel',
-        handler: () => {
-          this.isFabBtn = true;
+      message: '저장하시겠습니까?',
+      buttons: [
+        {
+          text: '취소',
+          role: 'cancel',
+          cssClass: 'secondary'
+        }, {
+          text: '저장',
+          handler: () => {
+            this.updateDeleteType1Cat();
+          }
         }
-      }, {
-        text: '추가',
-        handler: (alertData) => {
-          this.addType1Cat(defaultName, alertData.name)
-            .finally(() => this.isFabBtn = true);
-        }
-      }]
+      ]
     });
 
     await alert.present();
   }
 
-  async addType1Cat(defaultName: string, newName: string): Promise<any> {
+  clickTrash(): void {
+    this.sub.type1CatList = this.sub.type1CatList.filter((cat) => {
+      return !cat.checked;
+    });
+  }
 
-    if (newName.length > 64) {
-      this.cmnService.presentErrToast('64자 이하로 입력해주세요.');
-      return;
-    } else if (newName === '' || newName == null) {
-      newName = defaultName;
-    }
-
+  private async addType1Cat(newName: string): Promise<any> {
     const loading = await this.cmnService.getLoading();
     loading.present();
 
@@ -131,6 +171,120 @@ export class CatListPage implements OnInit {
     }
 
     loading.dismiss();
+  }
+
+  private async updateDeleteType1Cat(): Promise<any> {
+    const loading = await this.cmnService.getLoading();
+    loading.present();
+
+    const catCopyMap = new Map<Number, Cat>();
+    const sub = new Sub();
+    sub.id = this.sub.id;
+    sub.name = this.sub.name;
+    sub.num = this.sub.num;
+    sub.type0CatList = new Array<Cat>();  // for delete list
+    sub.type1CatList = new Array<Cat>();  // for update list
+
+    // subCopy map 생성
+    this.subCopy.type1CatList.forEach((cat) => {
+      catCopyMap.set(cat.id, cat);
+    });
+
+    // 비교하여 update list에 추가
+    this.sub.type1CatList.forEach((cat, index) => {
+      const catCopy = catCopyMap.get(cat.id);
+
+      cat.num = index + 1;
+      if (catCopy.name !== cat.name || catCopy.num !== cat.num) {
+        sub.type1CatList.push(cat);
+      }
+
+      catCopyMap.delete(catCopy.id);
+    });
+
+    // subCopy map 남은 목록 delete list에 추가
+    catCopyMap.forEach((cat) => {
+      sub.type0CatList.push(cat);
+    });
+
+    const rd = await this.sclwService.updateDeleteType1Cat(sub);
+
+    if (rd.res) {
+      this.sub = rd.data as Sub;
+      this.isSetting = false;
+      this.isFabBtn = true;
+    } else {
+      this.cmnService.presentErrToast(rd.toErrString());
+    }
+
+    loading.dismiss();
+  }
+
+  async alertNewType1Cat() {
+    this.isFabBtn = false;
+
+    const defaultName = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
+    const alert = await this.alertCtrl.create({
+      header: '단어장 추가',
+      inputs: [{
+        name: 'name',
+        value: defaultName,
+        placeholder: defaultName
+      }],
+      buttons: [{
+        text: '취소',
+        role: 'cancel',
+        handler: () => {
+          this.isFabBtn = true;
+        }
+      }, {
+        text: '추가',
+        handler: (alertData) => {
+          if (alertData.name.length > 64) {
+            this.cmnService.presentErrToast('64자 이하로 입력해주세요.');
+            return false;
+          } else if (alertData.name.trim() === '' || alertData.name == null) {
+            alertData.name = defaultName;
+          }
+
+          this.addType1Cat(alertData.name.trim())
+            .finally(() => this.isFabBtn = true);
+        }
+      }]
+    });
+
+    await alert.present();
+  }
+
+  async alertUpdateName(cat: Cat) {
+    const alert = await this.alertCtrl.create({
+      header: '이름 변경',
+      inputs: [{
+        name: 'name',
+        value: cat.name,
+        placeholder: cat.name
+      }],
+      buttons: [{
+        text: '취소',
+        role: 'cancel'
+      }, {
+        text: '변경',
+        handler: (alertData) => {
+          if (alertData.name.length > 64) {
+            this.cmnService.presentErrToast('64자 이하로 입력해주세요.');
+            return false;
+          } else if (alertData.name.trim() === '' || alertData.name == null) {
+            this.cmnService.presentErrToast('이름을 입력해주세요.');
+            return false;
+          } else {
+            cat.name = alertData.name.trim();
+          }
+        }
+      }]
+    });
+
+    await alert.present();
   }
 
 }

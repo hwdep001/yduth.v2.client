@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 
 import { ResponseData } from '../models/ResponseData';
+import { Sub } from './../models/Sub';
 import { Cat } from './../models/Cat';
 import { Lec } from './../models/Lec';
 
@@ -48,7 +49,27 @@ export class SclwService {
 
     const data = cat;
 
-    await this.http.put(`${this.apiServerUrl}/type1-cat`, data, {
+    await this.http.post(`${this.apiServerUrl}/type1-cat`, data, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
+
+    return rd;
+  }
+
+  async updateDeleteType1Cat(sub: Sub): Promise<ResponseData> {
+
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
+
+    const data = sub;
+
+    await this.http.post(`${this.apiServerUrl}/type1-cats`, data, {
         headers: new HttpHeaders().set('Authorization', idToken)
     }).toPromise().then(reponse => {
       rd = new ResponseData(reponse);
@@ -63,7 +84,7 @@ export class SclwService {
 
   async getLecs(catId: string): Promise<ResponseData> {
 
-    const idToken: string = await this.authService.getIdToken();
+    // const idToken: string = await this.authService.getIdToken();
     // let rd = new ResponseData({});
 
     // await this.http.get(`${this.apiServerUrl}/lecs/${catId}`, {
