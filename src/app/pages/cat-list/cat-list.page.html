@@ -48,11 +48,13 @@
         </ion-item>
       </ng-container>
 
-      <ion-item-divider color="lightgray">
-        <ion-label>
-          기본 단어장
-        </ion-label>
-      </ion-item-divider>
+      <ng-container *ngIf="sub.type0CatList.length > 0">
+        <ion-item-divider color="lightgray">
+          <ion-label>
+            기본 단어장
+          </ion-label>
+        </ion-item-divider>
+      </ng-container>
       <ion-item class="cursor" *ngFor="let cat of sub.type0CatList" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
     </ion-list>
   </ng-container>
