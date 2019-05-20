@@ -56,7 +56,7 @@ export class DayListPage implements OnInit {
   private subscribeBackButton(): void {
     this.unsubscribeBackEvent = this.platform.backButton.subscribeWithPriority(1, async () => {
       this.zone.run(() => {
-        this.cancelSetting();
+        this.cancelSetting(this.dayListCopy);
       });
     });
   }
@@ -144,9 +144,9 @@ export class DayListPage implements OnInit {
     this.isFabBtn = false;
   }
 
-  cancelSetting(): void {
+  cancelSetting(dayList: Array<Day>): void {
     this.unsubscribeBackEvent.unsubscribe();
-    this.dayList = this.dayListCopy;
+    this.dayList = dayList;
     this.isSetting = false;
     this.isFabBtn = true;
   }
@@ -226,13 +226,17 @@ export class DayListPage implements OnInit {
       deleteDayList.push(day);
     });
 
+    if (updateDayList.length === 0 && deleteDayList.length === 0) {
+      this.cancelSetting(this.dayListCopy);
+      loading.dismiss();
+      return;
+    }
+
     const rd = await this.sclwService.updateDeleteType1Days(
       this.cat.id, updateDayList, deleteDayList);
 
     if (rd.res) {
-      this.dayList = rd.data as Array<Day>;
-      this.isSetting = false;
-      this.isFabBtn = true;
+      this.cancelSetting(rd.data as Array<Day>);
       this.cmnService.presentSucToast('저장');
     } else {
       this.cmnService.presentErrToast(rd.toErrString());

@@ -54,7 +54,7 @@ export class CatListPage implements OnInit {
   private subscribeBackButton(): void {
     this.unsubscribeBackEvent = this.platform.backButton.subscribeWithPriority(1, async () => {
       this.zone.run(() => {
-        this.cancelSetting();
+        this.cancelSetting(this.subCopy);
       });
     });
   }
@@ -152,9 +152,9 @@ export class CatListPage implements OnInit {
     this.isFabBtn = false;
   }
 
-  cancelSetting(): void {
+  cancelSetting(sub: Sub): void {
     this.unsubscribeBackEvent.unsubscribe();
-    this.sub = this.subCopy;
+    this.sub = sub;
     this.isSetting = false;
     this.isFabBtn = true;
   }
@@ -238,18 +238,16 @@ export class CatListPage implements OnInit {
       sub.type0CatList.push(cat);
     });
 
-    // if (sub.type0CatList.length === 0 && sub.type1CatList.length === 0) {
-    //   loading.dismiss();
-    //   // 구독 취소
-    //   return;
-    // }
+    if (sub.type0CatList.length === 0 && sub.type1CatList.length === 0) {
+      this.cancelSetting(this.subCopy);
+      loading.dismiss();
+      return;
+    }
 
     const rd = await this.sclwService.updateDeleteType1Cats(sub);
 
     if (rd.res) {
-      this.sub = rd.data as Sub;
-      this.isSetting = false;
-      this.isFabBtn = true;
+      this.cancelSetting(rd.data as Sub);
       this.cmnService.presentSucToast('저장');
     } else {
       this.cmnService.presentErrToast(rd.toErrString());

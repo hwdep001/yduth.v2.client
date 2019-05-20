@@ -16,7 +16,7 @@
     </ng-container>
 
     <ng-container *ngIf="isSetting">
-      <ion-buttons slot="start" class="toolbar-back-btn cursor" (click)="cancelSetting()">
+      <ion-buttons slot="start" class="toolbar-back-btn cursor" (click)="cancelSetting(dayListCopy)">
         <ion-icon name="arrow-round-back"></ion-icon>
       </ion-buttons>
       <ion-title>
