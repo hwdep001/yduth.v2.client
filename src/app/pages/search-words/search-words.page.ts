@@ -34,7 +34,7 @@ export class SearchWordsPage implements OnInit {
     this.initData();
   }
 
-  async initData() {
+  private async initData() {
     const loading = await this.cmnService.getLoading();
     loading.present();
 

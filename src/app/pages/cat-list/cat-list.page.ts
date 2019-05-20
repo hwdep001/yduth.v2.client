@@ -61,7 +61,7 @@ export class CatListPage implements OnInit {
     });
   }
 
-  async initData(): Promise<any> {
+  private async initData(): Promise<any> {
     const loading = await this.cmnService.getLoading();
     loading.present();
 

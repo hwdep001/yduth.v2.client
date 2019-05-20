@@ -17,7 +17,7 @@ import { User } from './../../models/User';
 })
 export class ProfilePage implements OnInit {
 
-  public pageInfo;
+  public pageInfo = environment.pageInfo;
   public user: User = new User();
 
   public newNickname: string;
@@ -30,17 +30,15 @@ export class ProfilePage implements OnInit {
     private cmnService: CommonService,
     private authService: AuthService,
     private userService: UserService
-  ) {
-    this.pageInfo = environment.pageInfo;
+  ) { }
+
+  ngOnInit() {
+    console.log('ProfilePage');
     this.nicknameDisabled = true;
     if (this.authService.user != null) {
       this.user = this.authService.user;
       this.newNickname = this.user.nickname;
     }
-  }
-
-  ngOnInit() {
-    console.log('ProfilePage');
   }
 
   closeMenu() {
@@ -188,6 +186,5 @@ export class ProfilePage implements OnInit {
 
     await alert.present();
   }
-
 
 }

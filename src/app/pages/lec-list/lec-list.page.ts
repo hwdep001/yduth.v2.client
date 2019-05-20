@@ -34,7 +34,7 @@ export class LecListPage implements OnInit {
 
   // ionViewWillEnter() { }
 
-  async initData() {
+  private async initData() {
     const loading = await this.cmnService.getLoading();
     loading.present();
 

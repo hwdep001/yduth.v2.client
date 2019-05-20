@@ -16,7 +16,6 @@ export class PhotoPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('PhotoPage');
     this.photo = this.router.snapshot.paramMap.get('photo');
   }
 
