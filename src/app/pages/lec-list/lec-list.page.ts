@@ -16,7 +16,8 @@ import { Lec } from './../../models/Lec';
 })
 export class LecListPage implements OnInit {
 
-  public pageInfo = environment.pageInfo;
+  private pageInfo = environment.pageInfo;
+  public defaultHref: any;
   public cat: Cat;
   public lecList: Array<Lec>;
 
@@ -43,9 +44,15 @@ export class LecListPage implements OnInit {
     await this.getLecs(catId)
     .then(() => loading.dismiss())
     .catch(() => loading.dismiss());
+
+    this.getDefaultHref();
   }
 
-  async getLecs(catId: string): Promise<any> {
+  private getDefaultHref(): void {
+    this.defaultHref = [this.pageInfo.catList.url, this.cat.sub.id];
+  }
+
+  private async getLecs(catId: string): Promise<any> {
     return await this.sclwService.getLecs(catId)
       .then(rd => {
         if (rd.res) {

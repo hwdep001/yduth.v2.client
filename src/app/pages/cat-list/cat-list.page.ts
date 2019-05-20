@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { CommonService } from './../../services/common.service';
@@ -20,6 +21,8 @@ import { deepCopy } from 'src/app/utils/deep-copy';
 export class CatListPage implements OnInit {
 
   public pageInfo = environment.pageInfo;
+  public unsubscribeBackEvent: Subscription;
+
   public sub: Sub;
   public subCopy: Sub;
   public allCheck: boolean;
@@ -28,6 +31,8 @@ export class CatListPage implements OnInit {
   public isSetting = false;
 
   constructor(
+    private platform: Platform,
+    private zone: NgZone,
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
@@ -42,6 +47,19 @@ export class CatListPage implements OnInit {
   }
 
   // ionViewWillEnter() { }
+  ionViewWillLeave() {
+    if (this.unsubscribeBackEvent != null) {
+      this.unsubscribeBackEvent.unsubscribe();
+    }
+  }
+
+  private subscribeBackButton(): void {
+    this.unsubscribeBackEvent = this.platform.backButton.subscribeWithPriority(1, async () => {
+      this.zone.run(() => {
+        this.cancelSetting();
+      });
+    });
+  }
 
   async initData(): Promise<any> {
     const loading = await this.cmnService.getLoading();
@@ -81,6 +99,21 @@ export class CatListPage implements OnInit {
     this.router.navigate([this.pageInfo.lecList.url, cat.id], navigationExtras);
   }
 
+  moveSearchPage(): void {
+    const sub = new Sub();
+    sub.id = this.sub.id;
+    sub.name = this.sub.name;
+    sub.num = this.sub.num;
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        sub: JSON.stringify(sub)
+      },
+      skipLocationChange: environment.skipLocationChange
+    };
+    this.router.navigate([this.pageInfo.searchWords.url], navigationExtras);
+  }
+
   onRenderItems(event): void {
     const size = this.sub.type1CatList.length - 1;
     const from = size - event.detail.from;
@@ -93,7 +126,6 @@ export class CatListPage implements OnInit {
 
   clickAllCheck(ev) {
     const checkVal = !ev.target.checked;
-    console.log('all: ' + checkVal);
     for (const cat of this.sub.type1CatList) {
       cat.checked = checkVal;
     }
@@ -101,7 +133,6 @@ export class CatListPage implements OnInit {
 
   clickCatCheck(ev, cat: Cat) {
     const checkVal = !ev.target.checked;
-    console.log('cat: ' + checkVal);
     cat.checked = checkVal;
 
     let allCheck = true;
@@ -117,12 +148,14 @@ export class CatListPage implements OnInit {
   }
 
   clickSetting(): void {
+    this.subscribeBackButton();
     this.subCopy = <Sub>deepCopy(this.sub);
     this.isSetting = true;
     this.isFabBtn = false;
   }
 
   cancelSetting(): void {
+    this.unsubscribeBackEvent.unsubscribe();
     this.sub = this.subCopy;
     this.isSetting = false;
     this.isFabBtn = true;

@@ -33,6 +33,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: p.searchWords.path,
+    loadChildren: './pages/search-words/search-words.module#SearchWordsPageModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: p.groupList.path,
     loadChildren: './pages/group-list/group-list.module#GroupListPageModule',
     canActivate: [AuthGuard]
