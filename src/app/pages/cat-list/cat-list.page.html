@@ -43,7 +43,7 @@
             내 단어장
           </ion-label>
         </ion-item-divider>
-        <ion-item class="cursor" *ngFor="let cat of sub.type1CatList.slice().reverse()" (click)="moveLecListPage(cat)">
+        <ion-item class="cursor" *ngFor="let cat of sub.type1CatList.slice().reverse()" (click)="moveDayListPage(cat)">
           <ion-label>{{cat.num}} - {{cat.name}}</ion-label>
         </ion-item>
       </ng-container>
@@ -55,7 +55,7 @@
           </ion-label>
         </ion-item-divider>
       </ng-container>
-      <ion-item class="cursor" *ngFor="let cat of sub.type0CatList" (click)="moveLecListPage(cat)">{{cat.name}}</ion-item>
+      <ion-item class="cursor" *ngFor="let cat of sub.type0CatList" (click)="moveDayListPage(cat)">{{cat.name}}</ion-item>
     </ion-list>
   </ng-container>
 

@@ -83,7 +83,7 @@ export class CatListPage implements OnInit {
       }). catch(err => alert(err));
   }
 
-  moveLecListPage(cat: Cat): void {
+  moveDayListPage(cat: Cat): void {
     const sub = new Sub();
     sub.id = this.sub.id;
     sub.name = this.sub.name;
@@ -96,7 +96,7 @@ export class CatListPage implements OnInit {
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.lecList.url, cat.id], navigationExtras);
+    this.router.navigate([this.pageInfo.dayList.url, cat.id], navigationExtras);
   }
 
   moveSearchPage(): void {

@@ -28,8 +28,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: p.lecList.path,
-    loadChildren: './pages/lec-list/lec-list.module#LecListPageModule',
+    path: p.dayList.path,
+    loadChildren: './pages/day-list/day-list.module#DayListPageModule',
     canActivate: [AuthGuard]
   },
   {

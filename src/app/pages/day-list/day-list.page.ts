@@ -1,25 +1,25 @@
-import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { environment } from './../../../environments/environment';
 
-import { CommonService } from './../../services/common.service';
 import { SclwService } from './../../services/sclw.service';
+import { CommonService } from './../../services/common.service';
 
 import { Cat } from './../../models/Cat';
-import { Lec } from './../../models/Lec';
+import { Day } from '../../models/day';
 
 @Component({
-  selector: 'app-lec-list',
-  templateUrl: './lec-list.page.html',
-  styleUrls: ['./lec-list.page.scss'],
+  selector: 'app-day-list',
+  templateUrl: './day-list.page.html',
+  styleUrls: ['./day-list.page.scss'],
 })
-export class LecListPage implements OnInit {
+export class DayListPage implements OnInit {
 
   private pageInfo = environment.pageInfo;
   public defaultHref: any;
   public cat: Cat;
-  public lecList: Array<Lec>;
+  public dayList: Array<Day>;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +28,7 @@ export class LecListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('LecListPage');
+    console.log('DayListPage');
     this.initData();
   }
 
@@ -41,7 +41,7 @@ export class LecListPage implements OnInit {
     const catId = this.route.snapshot.params.catId;
     this.cat = JSON.parse(this.route.snapshot.queryParams.data) as Cat;
 
-    await this.getLecs(catId)
+    await this.getDays(catId)
     .then(() => loading.dismiss())
     .catch(() => loading.dismiss());
 
@@ -52,11 +52,11 @@ export class LecListPage implements OnInit {
     this.defaultHref = [this.pageInfo.catList.url, this.cat.sub.id];
   }
 
-  private async getLecs(catId: string): Promise<any> {
-    return await this.sclwService.getLecs(catId)
+  private async getDays(catId: string): Promise<any> {
+    return await this.sclwService.getDays(catId)
       .then(rd => {
         if (rd.res) {
-          this.lecList = rd.data as Array<Lec>;
+          this.dayList = rd.data as Array<Day>;
         } else {
           alert(rd.toErrString());
         }

@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { ResponseData } from '../models/ResponseData';
 import { Sub } from './../models/Sub';
 import { Cat } from './../models/Cat';
-import { Lec } from './../models/Lec';
+import { Day } from '../models/day';
 
 @Injectable({
   providedIn: 'root'
@@ -82,12 +82,12 @@ export class SclwService {
     return rd;
   }
 
-  async getLecs(catId: string): Promise<ResponseData> {
+  async getDays(catId: string): Promise<ResponseData> {
 
     // const idToken: string = await this.authService.getIdToken();
     // let rd = new ResponseData({});
 
-    // await this.http.get(`${this.apiServerUrl}/lecs/${catId}`, {
+    // await this.http.get(`${this.apiServerUrl}/days/${catId}`, {
     //     headers: new HttpHeaders().set('Authorization', idToken)
     // }).toPromise().then(reponse => {
     //   rd = new ResponseData(reponse);
@@ -98,16 +98,16 @@ export class SclwService {
     // });
 
     const rd = new ResponseData({});
-    const lecList = new Array<Lec>();
-    const lec1 = new Lec();
+    const lecList = new Array<Day>();
+    const lec1 = new Day();
     lec1.id = 1;
     lec1.name = 'lec1';
     lec1.num = 1;
-    const lec2 = new Lec();
+    const lec2 = new Day();
     lec2.id = 2;
     lec2.name = 'lec2';
     lec2.num = 2;
-    const lec3 = new Lec();
+    const lec3 = new Day();
     lec3.id = 3;
     lec3.name = 'lec3';
     lec3.num = 3;

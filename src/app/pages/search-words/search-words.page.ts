@@ -8,7 +8,7 @@ import { CommonService } from './../../services/common.service';
 
 import { Sub } from './../../models/Sub';
 import { Cat } from './../../models/Cat';
-import { Lec } from './../../models/Lec';
+import { Day } from './../../models/day';
 
 @Component({
   selector: 'app-search-words',
@@ -21,7 +21,7 @@ export class SearchWordsPage implements OnInit {
   public defaultHref: any;
   private sub: Sub;
   private cat: Cat;
-  private lec: Lec;
+  private day: Day;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +30,7 @@ export class SearchWordsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('LecListPage');
+    console.log('SearchWordsPage');
     this.initData();
   }
 
@@ -40,9 +40,9 @@ export class SearchWordsPage implements OnInit {
 
     this.sub = JSON.parse(this.route.snapshot.queryParamMap.get('sub')) as Sub;
     this.cat = JSON.parse(this.route.snapshot.queryParamMap.get('cat')) as Cat;
-    this.lec = JSON.parse(this.route.snapshot.queryParamMap.get('lec')) as Lec;
+    this.day = JSON.parse(this.route.snapshot.queryParamMap.get('day')) as Day;
 
-    await this.searchWords(this.sub, this.cat, this.lec)
+    await this.searchWords(this.sub, this.cat, this.day)
     .then(() => loading.dismiss())
     .catch(() => loading.dismiss());
 
@@ -50,23 +50,23 @@ export class SearchWordsPage implements OnInit {
   }
 
   private getDefaultHref(): void {
-    if (this.lec != null) {
-      // this.defaultHref = `${this.pageInfo.wordList.path}/${this.lec.id}`;
+    if (this.day != null) {
+      // this.defaultHref = `${this.pageInfo.wordList.path}/${this.day.id}`;
     } else if (this.cat != null) {
-      this.defaultHref = [this.pageInfo.lecList.url, this.cat.id];
+      this.defaultHref = [this.pageInfo.dayList.url, this.cat.id];
     } else {
       this.defaultHref = [this.pageInfo.catList.url, this.sub.id];
     }
   }
 
-  private async searchWords(sub: Sub, cat: Cat, lec: Lec): Promise<any> {
+  private async searchWords(sub: Sub, cat: Cat, day: Day): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       resolve(true);
     });
-    // return await this.sclwService.getLecs(catId)
+    // return await this.sclwService.getDays(catId)
     //   .then(rd => {
     //     if (rd.res) {
-    //       this.lecList = rd.data as Array<Lec>;
+    //       this.dayList = rd.data as Array<Lec>;
     //     } else {
     //       alert(rd.toErrString());
     //     }

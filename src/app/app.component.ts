@@ -81,7 +81,7 @@ export class AppComponent {
           // console.log('event.url: ' + event.url);
           // console.log('p.url: ' + p.url);
           const activeUrl = '/' + event.url.split('/')[1];
-          return p['active'.toString()] = (activeUrl === p.url || event.url === '/' && p.url === '/home');
+          return p['active'.toString()] = (event.url === p.url || event.url === '/' && p.url === '/home');
         });
       }
     });
