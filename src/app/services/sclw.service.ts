@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { ResponseData } from '../models/ResponseData';
 import { Sub } from './../models/Sub';
 import { Cat } from './../models/Cat';
-import { Day } from '../models/day';
+import { Day } from './../models/day';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +42,8 @@ export class SclwService {
     return rd;
   }
 
+  //////////////////////////////////////////////////////////////////////////////////
+
   async addType1Cat(cat: Cat): Promise<ResponseData> {
 
     const idToken: string = await this.authService.getIdToken();
@@ -62,7 +64,7 @@ export class SclwService {
     return rd;
   }
 
-  async updateDeleteType1Cat(sub: Sub): Promise<ResponseData> {
+  async updateDeleteType1Cats(sub: Sub): Promise<ResponseData> {
 
     const idToken: string = await this.authService.getIdToken();
     let rd = new ResponseData({});
@@ -82,40 +84,67 @@ export class SclwService {
     return rd;
   }
 
+  //////////////////////////////////////////////////////////////////////////////////
+
   async getDays(catId: string): Promise<ResponseData> {
 
-    // const idToken: string = await this.authService.getIdToken();
-    // let rd = new ResponseData({});
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
 
-    // await this.http.get(`${this.apiServerUrl}/days/${catId}`, {
-    //     headers: new HttpHeaders().set('Authorization', idToken)
-    // }).toPromise().then(reponse => {
-    //   rd = new ResponseData(reponse);
-    // }).catch((err: HttpErrorResponse) => {
-    //   rd.code = err.status;
-    //   rd.msg = err.statusText;
-    //   console.log(err);
-    // });
+    await this.http.get(`${this.apiServerUrl}/days/${catId}`, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
 
-    const rd = new ResponseData({});
-    const lecList = new Array<Day>();
-    const lec1 = new Day();
-    lec1.id = 1;
-    lec1.name = 'lec1';
-    lec1.num = 1;
-    const lec2 = new Day();
-    lec2.id = 2;
-    lec2.name = 'lec2';
-    lec2.num = 2;
-    const lec3 = new Day();
-    lec3.id = 3;
-    lec3.name = 'lec3';
-    lec3.num = 3;
-    lecList.push(lec1);
-    lecList.push(lec2);
-    lecList.push(lec3);
-    rd.res = true;
-    rd.data = lecList;
+    return rd;
+  }
+
+  async addType1Day(day: Day): Promise<ResponseData> {
+
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
+
+    const data = day;
+
+    await this.http.post(`${this.apiServerUrl}/type1-day`, data, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
+
+    return rd;
+  }
+
+  async updateDeleteType1Days(catId: number,
+    updateDayList: Array<Day>, deleteDayList: Array<Day>): Promise<ResponseData> {
+
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
+
+    const data = {
+      catId,
+      deleteDayList: deleteDayList,
+      updateDayList: updateDayList,
+    };
+
+    await this.http.post(`${this.apiServerUrl}/type1-days`, data, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
 
     return rd;
   }

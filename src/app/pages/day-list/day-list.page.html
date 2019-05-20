@@ -1,14 +1,87 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" class="side-menu-back-btn">
-      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
-    </ion-buttons>
-    <ion-title>
-      {{cat?.name}}
-    </ion-title>
+    <ng-container *ngIf="!isSetting">
+      <ion-buttons slot="start" class="side-menu-back-btn">
+        <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+        {{cat?.name}}
+      </ion-title>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="moveSearchPage()">
+        <ion-icon name="search"></ion-icon>
+      </ion-buttons>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="clickSetting()" *ngIf="cat?.typeId == 1">
+        <ion-icon name="settings"></ion-icon>
+      </ion-buttons>
+    </ng-container>
+
+    <ng-container *ngIf="isSetting">
+      <ion-buttons slot="start" class="toolbar-back-btn cursor" (click)="cancelSetting()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-buttons>
+      <ion-title>
+        {{cat?.name}}
+      </ion-title>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="clickTrash()">
+        <ion-icon name="trash" color="danger"></ion-icon>
+      </ion-buttons>
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="saveSetting()">
+        <ion-icon name="save" color="primary"></ion-icon>
+      </ion-buttons>
+    </ng-container>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="cat">
-{{cat.sub.name}}
+
+  <!-- lec list -->
+  <ng-container *ngIf="!isSetting">
+    <ion-list>
+      <ion-item class="cursor" *ngFor="let day of dayList" (click)="moveWordListPage(day)">
+        {{day.num}} - {{day.name}}
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <!-- setting page -->
+  <ng-container *ngIf="isSetting && cat?.typeId == 1">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="col-checkbox">
+          <ion-item lines="none">
+            <ion-checkbox [(ngModel)]="allCheck" (click)="clickAllCheck($event)"></ion-checkbox>
+          </ion-item>
+        </ion-col>
+        <ion-col class="col-reorder">
+          <ion-item>
+            <ion-label>All</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-reorder-group (ionItemReorder)="onRenderItems($event)" disabled="false">
+        <ion-row *ngFor="let day of dayList">
+          <ion-col class="col-checkbox">
+            <ion-item lines="none">
+              <ion-checkbox [(ngModel)]="day.checked" (click)="clickDayCheck($event, day)"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+          <ion-col class="col-reorder">
+            <ion-item>
+              <ion-label class="cursor" (click)="alertUpdateName(day)">{{day.num}} - {{day.name}}</ion-label>
+              <ion-reorder></ion-reorder>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-reorder-group>
+    </ion-grid>
+  </ng-container>
+
+  <!-- fab button -->
+  <ion-fab *ngIf="isFabBtn && cat?.typeId == 1" vertical="bottom" horizontal="end" slot="fixed" (click)="alertNewType1Day()">
+    <ion-fab-button size="small" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { AlertController, Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -15,8 +14,8 @@ import { deepCopy } from 'src/app/utils/deep-copy';
 @Component({
   selector: 'app-cat-list',
   templateUrl: './cat-list.page.html',
-  styleUrls: ['./cat-list.page.scss'],
-  providers: [DatePipe]
+  styleUrls: ['./cat-list.page.scss']
+  // ,providers: [DatePipe]
 })
 export class CatListPage implements OnInit {
 
@@ -35,7 +34,6 @@ export class CatListPage implements OnInit {
     private zone: NgZone,
     private router: Router,
     private route: ActivatedRoute,
-    private datePipe: DatePipe,
     private alertCtrl: AlertController,
     private cmnService: CommonService,
     private sclwService: SclwService
@@ -172,7 +170,7 @@ export class CatListPage implements OnInit {
         }, {
           text: '저장',
           handler: () => {
-            this.updateDeleteType1Cat();
+            this.updateDeleteType1Cats();
           }
         }
       ]
@@ -206,7 +204,7 @@ export class CatListPage implements OnInit {
     loading.dismiss();
   }
 
-  private async updateDeleteType1Cat(): Promise<any> {
+  private async updateDeleteType1Cats(): Promise<any> {
     const loading = await this.cmnService.getLoading();
     loading.present();
 
@@ -240,12 +238,19 @@ export class CatListPage implements OnInit {
       sub.type0CatList.push(cat);
     });
 
-    const rd = await this.sclwService.updateDeleteType1Cat(sub);
+    // if (sub.type0CatList.length === 0 && sub.type1CatList.length === 0) {
+    //   loading.dismiss();
+    //   // 구독 취소
+    //   return;
+    // }
+
+    const rd = await this.sclwService.updateDeleteType1Cats(sub);
 
     if (rd.res) {
       this.sub = rd.data as Sub;
       this.isSetting = false;
       this.isFabBtn = true;
+      this.cmnService.presentSucToast('저장');
     } else {
       this.cmnService.presentErrToast(rd.toErrString());
     }
@@ -256,7 +261,7 @@ export class CatListPage implements OnInit {
   async alertNewType1Cat() {
     this.isFabBtn = false;
 
-    const defaultName = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    const defaultName = this.cmnService.getCurrentDateTime();
 
     const alert = await this.alertCtrl.create({
       header: '단어장 추가',

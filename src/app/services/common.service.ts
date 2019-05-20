@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { LoadingController, ToastController } from '@ionic/angular';
 
 @Injectable({
@@ -8,7 +9,8 @@ export class CommonService {
 
   constructor(
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private datePipe: DatePipe,
   ) { }
 
   async presentSucToast(message: string) {
@@ -46,6 +48,13 @@ export class CommonService {
       translucent: true,
       duration: (duration == null ? 20000 : duration)
     });
+  }
+
+  getCurrentDateTime(format?: string): string {
+    if (format == null || format.trim() === '') {
+      format = 'yyyy-MM-dd HH:mm:ss';
+    }
+    return this.datePipe.transform(new Date(), format);
   }
 
 }
