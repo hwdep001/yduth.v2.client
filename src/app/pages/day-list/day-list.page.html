@@ -46,7 +46,7 @@
   <!-- setting page -->
   <ng-container *ngIf="isSetting && cat?.typeId == 1">
     <ion-grid>
-      <ion-row>
+      <ion-row class="row-all">
         <ion-col class="col-checkbox">
           <ion-item lines="none">
             <ion-checkbox [(ngModel)]="allCheck" (click)="clickAllCheck($event)"></ion-checkbox>
@@ -55,6 +55,9 @@
         <ion-col class="col-reorder">
           <ion-item>
             <ion-label>All</ion-label>
+            <ion-buttons slot="end" class="sort-btn cursor" (click)="sortCatList($event)">
+              <ion-icon name="more"></ion-icon>
+            </ion-buttons>
           </ion-item>
         </ion-col>
       </ion-row>

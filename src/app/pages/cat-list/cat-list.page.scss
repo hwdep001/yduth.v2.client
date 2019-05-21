@@ -63,5 +63,11 @@ ion-content {
         }
       }
     }
+
+    .row-all {
+      ion-item {
+        --background: var(--ion-color-lightgray);
+      }
+    }
   }
 }

@@ -65,3 +65,16 @@ ion-list-header{
 .user-select {
   user-select: text;
 }
+
+// sort-popover
+.sort-popover .popover-content {
+  --max-width: 150px !important;
+  --min-width: 150px !important;
+
+  ion-item {
+    --min-height: 35px;
+    --padding-start: 7px;
+    --padding-end: 7px;
+    font-size: 13px;
+  }
+}

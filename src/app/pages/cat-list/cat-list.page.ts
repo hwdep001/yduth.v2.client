@@ -15,7 +15,6 @@ import { deepCopy } from 'src/app/utils/deep-copy';
   selector: 'app-cat-list',
   templateUrl: './cat-list.page.html',
   styleUrls: ['./cat-list.page.scss']
-  // ,providers: [DatePipe]
 })
 export class CatListPage implements OnInit {
 

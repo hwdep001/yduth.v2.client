@@ -63,5 +63,24 @@ ion-content {
         }
       }
     }
+
+    .row-all {
+      ion-item {
+        --background: var(--ion-color-lightgray);
+
+        .sort-btn {
+          width: 32px;
+          height: 32px;
+
+          ion-icon {
+            width: 26px;
+            height: 32px;
+
+            padding-left: 3px;
+            padding-right: 3px;
+          }
+        }
+      }
+    }
   }
 }

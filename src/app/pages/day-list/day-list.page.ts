@@ -1,9 +1,11 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { Platform, AlertController } from '@ionic/angular';
+import { Platform, AlertController, PopoverController } from '@ionic/angular';
 
 import { environment } from './../../../environments/environment';
 import { Subscription } from 'rxjs';
+
+import { SortPopoverComponent } from './../../components/sort-popover/sort-popover.component';
 
 import { SclwService } from './../../services/sclw.service';
 import { CommonService } from './../../services/common.service';
@@ -38,6 +40,7 @@ export class DayListPage implements OnInit {
     private route: ActivatedRoute,
     private cmnService: CommonService,
     private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController,
     private sclwService: SclwService
   ) { }
 
@@ -310,6 +313,31 @@ export class DayListPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async sortCatList(ev: any) {
+    const popover = await this.popoverCtrl.create({
+      component: SortPopoverComponent,
+      event: ev,
+      translucent: true,
+      cssClass: 'sort-popover'
+    });
+
+    popover.onDidDismiss().then(evDetail => {
+      if (evDetail.role === 'sort') {
+        console.log(evDetail.data);
+        const column = evDetail.data.column;
+        const direction = evDetail.data.direction;
+
+        if (direction === 0) {
+          this.dayList.sort((a, b) => (a[column] > b[column]) ? 1 : -1);
+        } else {
+          this.dayList.sort((a, b) => (a[column] > b[column]) ? -1 : 1);
+        }
+      }
+    });
+
+    await popover.present();
   }
 
 }

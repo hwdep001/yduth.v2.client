@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { DayListPage } from './day-list.page';
+import { SortPopoverComponent } from 'src/app/components/sort-popover/sort-popover.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [DayListPage]
+  entryComponents: [SortPopoverComponent],
+  declarations: [
+    DayListPage,
+    SortPopoverComponent
+  ]
 })
 export class DayListPageModule {}
