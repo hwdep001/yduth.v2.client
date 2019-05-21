@@ -33,10 +33,16 @@ ion-header {
 ion-content {
   --background: var(--ion-color-lightgray);
   
+  // list
   ion-list {
     padding: 0px;
+
+    ion-item {
+      --inner-padding-end: 5px;
+    }
   }
 
+  // setting
   ion-grid {
     padding: 0px;
 

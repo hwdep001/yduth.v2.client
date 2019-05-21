@@ -33,10 +33,30 @@ ion-header {
 ion-content {
   --background: var(--ion-color-lightgray);
   
+  // list
   ion-list {
     padding: 0px;
+
+    ion-item {
+      --inner-padding-end: 5px;
+  
+      .info-btn {
+        margin: 0px !important;
+        width: 36px;
+        height: 32px;
+    
+        ion-icon {
+          width: 26px;
+          height: 32px;
+    
+          padding-left: 5px;
+          padding-right: 5px;
+        }
+      }
+    }
   }
 
+  // setting
   ion-grid {
     padding: 0px;
 

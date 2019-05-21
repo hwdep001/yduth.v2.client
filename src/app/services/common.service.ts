@@ -50,11 +50,14 @@ export class CommonService {
     });
   }
 
-  getCurrentDateTime(format?: string): string {
+  toStringDateTime(date?: Date, format?: string): string {
+    if (date == null) {
+      date = new Date();
+    }
     if (format == null || format.trim() === '') {
       format = 'yyyy-MM-dd HH:mm:ss';
     }
-    return this.datePipe.transform(new Date(), format);
+    return this.datePipe.transform(date, format);
   }
 
 }

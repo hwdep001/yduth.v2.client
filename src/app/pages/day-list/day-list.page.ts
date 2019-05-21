@@ -251,7 +251,7 @@ export class DayListPage implements OnInit {
   async alertNewType1Day() {
     this.isFabBtn = false;
 
-    const defaultName = this.cmnService.getCurrentDateTime();
+    const defaultName = this.cmnService.toStringDateTime();
 
     const alert = await this.alertCtrl.create({
       header: 'Day 추가',
@@ -325,7 +325,6 @@ export class DayListPage implements OnInit {
 
     popover.onDidDismiss().then(evDetail => {
       if (evDetail.role === 'sort') {
-        console.log(evDetail.data);
         const column = evDetail.data.column;
         const direction = evDetail.data.direction;
 

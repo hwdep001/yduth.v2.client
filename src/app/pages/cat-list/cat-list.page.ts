@@ -258,7 +258,7 @@ export class CatListPage implements OnInit {
   async alertNewType1Cat() {
     this.isFabBtn = false;
 
-    const defaultName = this.cmnService.getCurrentDateTime();
+    const defaultName = this.cmnService.toStringDateTime();
 
     const alert = await this.alertCtrl.create({
       header: '단어장 추가',
@@ -317,6 +317,40 @@ export class CatListPage implements OnInit {
           }
         }
       }]
+    });
+
+    await alert.present();
+  }
+
+  async clickInfo(cat: Cat) {
+    const alert = await this.alertCtrl.create({
+      header: cat.name,
+      inputs: [
+        {
+          name: 'createDate',
+          type: 'text',
+          value: `등록: ${this.cmnService.toStringDateTime(cat.createDate)}`,
+          disabled: true
+        },
+        {
+          name: 'updateDate',
+          type: 'text',
+          value: `업데이트: ${this.cmnService.toStringDateTime(cat.updateDate)}`,
+          disabled: true
+        },
+        {
+          name: 'version',
+          type: 'text',
+          value: '버전: ' + (cat.typeId === 0 ? cat.version : '-'),
+          disabled: true
+        }
+      ],
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ]
     });
 
     await alert.present();
