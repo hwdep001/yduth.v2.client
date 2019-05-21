@@ -92,6 +92,9 @@ export class DayListPage implements OnInit {
   moveWordListPage(day: Day): void {
   }
 
+  moveXXXPage() {
+  }
+
   moveSearchPage(): void {
     const cat = new Cat();
     cat.id = this.cat.id;
