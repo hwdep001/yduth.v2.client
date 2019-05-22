@@ -68,17 +68,16 @@ export class DayListPage implements OnInit {
     const loading = await this.cmnService.getLoading();
     loading.present();
 
-    const catId = this.route.snapshot.params.catId;
     this.cat = JSON.parse(this.route.snapshot.queryParams.data) as Cat;
 
-    await this.getDays(catId)
+    await this.getDays(this.cat.id)
     .then(() => loading.dismiss())
     .catch(() => loading.dismiss());
 
     this.defaultHref = [this.pageInfo.catList.url, this.cat.sub.id];
   }
 
-  private async getDays(catId: string): Promise<any> {
+  private async getDays(catId: number): Promise<any> {
     return await this.sclwService.getDays(catId)
       .then(rd => {
         if (rd.res) {
@@ -92,7 +91,14 @@ export class DayListPage implements OnInit {
   moveWordListPage(day: Day): void {
   }
 
-  moveXXXPage() {
+  moveTestReadyPage(): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        cat: JSON.stringify(this.cat)
+      },
+      skipLocationChange: environment.skipLocationChange
+    };
+    this.router.navigate([this.pageInfo.testReady.url], navigationExtras);
   }
 
   moveSearchPage(): void {

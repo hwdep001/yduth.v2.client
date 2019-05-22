@@ -10,7 +10,7 @@
       <ion-buttons slot="end" class="toolbar-btn cursor" (click)="moveSearchPage()">
         <ion-icon name="search"></ion-icon>
       </ion-buttons>
-      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="moveXXXPage()">
+      <ion-buttons slot="end" class="toolbar-btn cursor" (click)="moveTestReadyPage()">
         <ion-icon name="create"></ion-icon>
       </ion-buttons>
       <ion-buttons slot="end" class="toolbar-btn cursor" (click)="clickSetting()" *ngIf="cat?.typeId == 1">
@@ -40,8 +40,19 @@
   <!-- lec list -->
   <ng-container *ngIf="!isSetting">
     <ion-list>
-      <ion-item class="cursor" *ngFor="let day of dayList" (click)="moveWordListPage(day)">
-        {{day.num}} - {{day.name}}
+      <ion-item class="cursor" *ngFor="let day of dayList">
+        <ion-label class="name-label" (click)="moveWordListPage(day)">{{day.name}}</ion-label>
+        <ion-note slot="end" class="progress-note">1%</ion-note>
+        <!-- <ion-buttons slot="end" class="cursor study-btn" (click)="moveWordListPage(day)">
+          <ion-icon name="book"></ion-icon>
+          progress 안할 경우 study-btn css 제거@@@@@@@@@@@@@@@@@@@@@@
+        </ion-buttons> -->
+        <ion-buttons slot="end" class="cursor" (click)="moveWordListPage(day)">
+          <ion-icon name="list"></ion-icon>
+        </ion-buttons>
+        <ion-buttons slot="end" class="cursor" (click)="moveWordListPage(day)">
+          <ion-icon name="card"></ion-icon>
+        </ion-buttons>
       </ion-item>
     </ion-list>
   </ng-container>
@@ -74,7 +85,7 @@
           </ion-col>
           <ion-col class="col-reorder">
             <ion-item>
-              <ion-label class="cursor" (click)="alertUpdateName(day)">{{day.num}} - {{day.name}}</ion-label>
+              <ion-label class="cursor" (click)="alertUpdateName(day)">{{day.name}}</ion-label>
               <ion-reorder></ion-reorder>
             </ion-item>
           </ion-col>

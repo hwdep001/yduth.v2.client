@@ -44,7 +44,7 @@
           </ion-label>
         </ion-item-divider>
         <ion-item *ngFor="let cat of sub.type1CatList.slice().reverse()">
-          <ion-label class="cursor" (click)="moveDayListPage(cat)">{{cat.num}} - {{cat.name}}</ion-label>
+          <ion-label class="cursor" (click)="moveDayListPage(cat)">{{cat.name}}</ion-label>
           <ion-buttons slot="end" class="info-btn cursor" (click)="clickInfo(cat)">
             <ion-icon name="information" color="medium"></ion-icon>
           </ion-buttons>
@@ -92,7 +92,7 @@
           </ion-col>
           <ion-col class="col-reorder">
             <ion-item>
-              <ion-label class="cursor" (click)="alertUpdateName(cat)">{{cat.num}} - {{cat.name}}</ion-label>
+              <ion-label class="cursor" (click)="alertUpdateName(cat)">{{cat.name}}</ion-label>
               <ion-reorder></ion-reorder>
             </ion-item>
           </ion-col>

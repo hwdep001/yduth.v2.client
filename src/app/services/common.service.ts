@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,7 @@ export class CommonService {
 
   constructor(
     private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private datePipe: DatePipe,
   ) { }
@@ -38,6 +39,15 @@ export class CommonService {
       translucent: true
     });
     toast.present();
+  }
+
+  async getAlert(header: string, subHeader: string, message: string): Promise<HTMLIonAlertElement> {
+    return await this.alertCtrl.create({
+      header,
+      subHeader,
+      message,
+      buttons: ['Close']
+    });
   }
 
   async getLoading(message?: string, duration?: number): Promise<HTMLIonLoadingElement> {

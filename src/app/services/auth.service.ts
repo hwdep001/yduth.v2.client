@@ -152,7 +152,12 @@ export class AuthService {
       this.userInfo = rd.data as User;
     } else {
       this.signOut();
-      this.cmnService.presentErrToast(rd.toErrString());
+      if (rd.code === 9999) {
+        const alert = await this.cmnService.getAlert('서버 점검', null, rd.msg);
+        alert.present();
+      } else {
+        this.cmnService.presentErrToast(rd.toErrString());
+      }
     }
 
     return this.userInfo;

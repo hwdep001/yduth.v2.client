@@ -86,7 +86,7 @@ export class SclwService {
 
   //////////////////////////////////////////////////////////////////////////////////
 
-  async getDays(catId: string): Promise<ResponseData> {
+  async getDays(catId: number): Promise<ResponseData> {
 
     const idToken: string = await this.authService.getIdToken();
     let rd = new ResponseData({});

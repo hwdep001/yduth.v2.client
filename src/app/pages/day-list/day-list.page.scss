@@ -39,6 +39,37 @@ ion-content {
 
     ion-item {
       --inner-padding-end: 5px;
+
+      .progress-note {
+        width: 48px;
+        margin: 0px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 16px;
+        padding-bottom: 17px;
+        text-align: center;
+      }
+
+      ion-buttons {
+        width: 40px;
+        height: 48px;
+
+        margin: 0px;
+
+        ion-icon {
+          width: 20px;
+          height: 20px;
+
+          padding-left: 10px;
+          padding-right: 10px;
+        }   
+      }
+
+      .study-btn {
+        width: 40px;
+        margin-left: 20px;
+        margin-right: 20px;
+      }
     }
   }
 
