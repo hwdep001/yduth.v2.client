@@ -33,8 +33,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: p.testReady.path,
-    loadChildren: './pages/test-ready/test-ready.module#TestReadyPageModule',
+    path: p.examReady.path,
+    loadChildren: './pages/exam-ready/exam-ready.module#ExamReadyPageModule',
     canActivate: [AuthGuard]
   },
   {

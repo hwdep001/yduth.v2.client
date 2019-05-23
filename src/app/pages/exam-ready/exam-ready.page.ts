@@ -9,11 +9,11 @@ import { Cat } from './../../models/Cat';
 import { Day } from './../../models/Day';
 
 @Component({
-  selector: 'app-test-ready',
-  templateUrl: './test-ready.page.html',
-  styleUrls: ['./test-ready.page.scss'],
+  selector: 'app-exam-ready',
+  templateUrl: './exam-ready.page.html',
+  styleUrls: ['./exam-ready.page.scss'],
 })
-export class TestReadyPage implements OnInit {
+export class ExamReadyPage implements OnInit {
 
   private pageInfo = environment.pageInfo;
   public defaultHref: any;
@@ -30,19 +30,19 @@ export class TestReadyPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('TestReadyPage');
+    console.log('ExamReadyPage');
     this.initData();
   }
 
   private async initData(): Promise<any> {
-    // const loading = await this.cmnService.getLoading();
-    // loading.present();
+    const loading = await this.cmnService.getLoading();
+    loading.present();
 
     this.cat = JSON.parse(this.route.snapshot.queryParamMap.get('cat')) as Cat;
 
-    // await this.getDays(this.cat.id)
-    // .then(() => loading.dismiss())
-    // .catch(() => loading.dismiss());
+    await this.getDays(this.cat.id)
+    .then(() => loading.dismiss())
+    .catch(() => loading.dismiss());
 
     this.defaultHref = [this.pageInfo.catList.url, this.cat.sub.id];
   }

@@ -91,14 +91,14 @@ export class DayListPage implements OnInit {
   moveWordListPage(day: Day): void {
   }
 
-  moveTestReadyPage(): void {
+  moveExamReadyPage(): void {
     const navigationExtras: NavigationExtras = {
       queryParams: {
         cat: JSON.stringify(this.cat)
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.testReady.url], navigationExtras);
+    this.router.navigate([this.pageInfo.examReady.url], navigationExtras);
   }
 
   moveSearchPage(): void {

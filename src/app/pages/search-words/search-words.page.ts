@@ -50,13 +50,7 @@ export class SearchWordsPage implements OnInit {
   }
 
   private getDefaultHref(): void {
-    if (this.day != null) {
-      // this.defaultHref = `${this.pageInfo.wordList.path}/${this.day.id}`;
-    } else if (this.cat != null) {
-      this.defaultHref = [this.pageInfo.dayList.url, this.cat.id];
-    } else {
-      this.defaultHref = [this.pageInfo.catList.url, this.sub.id];
-    }
+    this.defaultHref = [this.pageInfo.catList.url, this.sub.id];
   }
 
   private async searchWords(sub: Sub, cat: Cat, day: Day): Promise<any> {

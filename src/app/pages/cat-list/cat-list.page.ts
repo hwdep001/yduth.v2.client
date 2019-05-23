@@ -85,6 +85,7 @@ export class CatListPage implements OnInit {
     sub.id = this.sub.id;
     sub.name = this.sub.name;
     sub.num = this.sub.num;
+    sub.examTypeList = this.sub.examTypeList;
     cat.sub = sub;
 
     const navigationExtras: NavigationExtras = {

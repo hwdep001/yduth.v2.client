@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" class="side-menu-back-btn">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      exam-ready
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- TEST -->
+  <ion-list *ngIf="cat">
+    <ion-item>
+      sub: {{cat.sub.id}} - {{cat.sub.name}}
+    </ion-item>
+    <ion-item *ngFor="let et of cat.sub.examTypeList">
+      et: {{et.id}} - {{et.name}}
+    </ion-item>
+    <ion-item>
+      cat: {{cat.id}} - {{cat.name}}
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="cat">
+    <ion-item *ngFor="let day of dayList">
+      {{day.id}} - {{day.name}} - {{day.num}}
+    </ion-item>
+  </ion-list>
+</ion-content>
