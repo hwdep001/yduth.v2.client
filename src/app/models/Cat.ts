@@ -9,6 +9,7 @@ export class Cat {
     num: number;
     subId: string;
     typeId: number;
+    createUid: string;
 
     sub: Sub;
 
