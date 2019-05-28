@@ -75,8 +75,18 @@ export class AppComponent {
         this.pagesMap.forEach( (p, key) => {
           // console.log('event.url: ' + event.url);
           // console.log('p.url: ' + p.url);
-          const activeUrl = '/' + event.url.split('/')[1];
-          return p['active'.toString()] = (event.url === p.url || event.url === '/' && p.url === '/home');
+          // return p['active'.toString()] = (event.url === p.url || event.url === '/' && p.url === '/home');
+
+          let result = false;
+          if (event.url === p.url || event.url === '/' && p.url === '/home') {
+            result = true;
+          } else if (p.param != null && event.url.startsWith(p.param.menuUrl)) {
+            result = true;
+          } else if (event.url.includes('/tab/') && event.url.split('/tab/')[0] === p.url) {
+            result = true;
+          }
+
+          return p['active'.toString()] = result;
         });
       }
     });
@@ -118,8 +128,7 @@ export class AppComponent {
           title: subIdNameMap.get(subId),
           url: `${this.p.catList.url}/${subId}`, icon: 'pricetags',
           param: {
-            menuUrl: `${this.p.catList.url}/${subId}`,
-            childUrl: `${this.p.catList.url}`
+            menuUrl: `${this.p.catList.url}/${subId}`
           }
         };
 

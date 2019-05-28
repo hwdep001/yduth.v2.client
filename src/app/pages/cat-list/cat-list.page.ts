@@ -94,7 +94,8 @@ export class CatListPage implements OnInit {
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.dayList.url, cat.id], navigationExtras);
+    this.router.navigate(
+      [this.pageInfo.dayList.url.replace(':subId', sub.id), cat.id], navigationExtras);
   }
 
   moveSearchPage(): void {
@@ -109,7 +110,8 @@ export class CatListPage implements OnInit {
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.searchWords.url], navigationExtras);
+    this.router.navigate(
+      [this.pageInfo.searchWords.url.replace(':subId', sub.id)], navigationExtras);
   }
 
   onRenderItems(event): void {

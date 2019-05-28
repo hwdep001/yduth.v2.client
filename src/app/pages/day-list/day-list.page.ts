@@ -98,7 +98,8 @@ export class DayListPage implements OnInit {
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.examReady.url], navigationExtras);
+    this.router.navigate(
+      [this.pageInfo.examReady.url.replace(':subId', this.cat.subId)], navigationExtras);
   }
 
   moveSearchPage(): void {
@@ -114,7 +115,8 @@ export class DayListPage implements OnInit {
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.searchWords.url], navigationExtras);
+    this.router.navigate(
+      [this.pageInfo.searchWords.url.replace(':subId', this.cat.subId)], navigationExtras);
   }
 
   onRenderItems(event): void {
