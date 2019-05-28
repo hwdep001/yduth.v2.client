@@ -10,8 +10,8 @@ import { SortPopoverComponent } from './../../components/sort-popover/sort-popov
 import { SclwService } from './../../services/sclw.service';
 import { CommonService } from './../../services/common.service';
 
-import { Cat } from './../../models/Cat';
-import { Day } from '../../models/day';
+import { Cat } from 'src/app/models/Cat';
+import { Day } from 'src/app/models/Day';
 import { deepCopy } from 'src/app/utils/deep-copy';
 
 @Component({

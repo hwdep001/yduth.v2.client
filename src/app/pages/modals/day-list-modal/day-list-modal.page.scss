@@ -1,0 +1,15 @@
+ion-content {
+  --background: var(--ion-color-lightgray);
+
+  .type-list {
+    margin-bottom: 10px;
+    padding: 0px;
+  }
+  .day-list {
+    padding: 0px;
+  }
+}
+
+ion-footer {
+  --background: var(--ion-color-lightgray);
+}

@@ -66,6 +66,20 @@ ion-list-header{
   user-select: text;
 }
 
+// custom 백 버튼
+.toolbar-back-btn {
+  width: 42px;
+  height: 32px;
+
+  ion-icon {
+    width: 26px;
+    height: 32px;
+    
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
 // sort-popover
 .sort-popover .popover-content {
   --max-width: 150px !important;

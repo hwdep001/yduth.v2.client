@@ -42,6 +42,24 @@ export class SclwService {
     return rd;
   }
 
+  async getSubsWithCats(): Promise<ResponseData> {
+
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
+
+    await this.http.get(`${this.apiServerUrl}/subs-cats`, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
+
+    return rd;
+  }
+
   //////////////////////////////////////////////////////////////////////////////////
 
   async addType1Cat(cat: Cat): Promise<ResponseData> {
@@ -137,6 +155,32 @@ export class SclwService {
     };
 
     await this.http.post(`${this.apiServerUrl}/type1-days`, data, {
+        headers: new HttpHeaders().set('Authorization', idToken)
+    }).toPromise().then(reponse => {
+      rd = new ResponseData(reponse);
+    }).catch((err: HttpErrorResponse) => {
+      rd.code = err.status;
+      rd.msg = err.statusText;
+      console.log(err);
+    });
+
+    return rd;
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////
+
+  async initWordUser(
+    typeList: Array<number>, dayIdList: Array<number>): Promise<ResponseData> {
+
+    const idToken: string = await this.authService.getIdToken();
+    let rd = new ResponseData({});
+
+    const data = {
+      typeList,
+      dayIdList
+    };
+
+    await this.http.post(`${this.apiServerUrl}/word-user/init`, data, {
         headers: new HttpHeaders().set('Authorization', idToken)
     }).toPromise().then(reponse => {
       rd = new ResponseData(reponse);

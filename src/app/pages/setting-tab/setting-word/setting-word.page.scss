@@ -1,0 +1,21 @@
+ion-content {
+  --background: var(--ion-color-lightgray);
+
+  ion-list {
+    padding: 0px;
+
+    ion-buttons {
+      margin: 0px !important;
+      width: 36px;
+      height: 32px;
+  
+      ion-icon {
+        width: 26px;
+        height: 32px;
+  
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
+  }
+}

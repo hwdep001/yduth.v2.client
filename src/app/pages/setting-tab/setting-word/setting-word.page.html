@@ -1,9 +1,26 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>setting-word</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      단어 설정
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ng-container *ngIf="subList">
+    <ion-list *ngFor="let sub of subList">
+      <ion-list-header>{{sub.name}}</ion-list-header>
 
+      <ion-item *ngFor="let cat of sub.type0CatList">
+        <label>{{cat.name}}</label>
+        <ion-buttons slot="end" class="cursor" (click)="presentInitModal(cat)">
+          <ion-icon name="refresh" color="medium"></ion-icon>
+        </ion-buttons>
+      </ion-item>
+      
+    </ion-list>
+  </ng-container>
 </ion-content>
