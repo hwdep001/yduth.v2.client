@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TempTab2Page } from './temp-tab2.page';
+import { SettingExamPage } from './setting-exam.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: TempTab2Page
+    component: SettingExamPage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [TempTab2Page]
+  declarations: [SettingExamPage]
 })
-export class TempTab2PageModule {}
+export class SettingExamPageModule {}

@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { environment } from 'src/environments/environment';
+import { CommonService } from './services/common.service';
 
 // models
 import { User } from './models/User';
@@ -23,6 +24,7 @@ export class AppComponent {
 
   public menuDisabled = true;
   public menus = new Array<MenuInterface>();
+  private p = environment.pageInfo;
   private pagesMap: Map<string, PageInterface>;
 
   public user: User;
@@ -35,25 +37,18 @@ export class AppComponent {
     private router: Router,
     private alertCtrl: AlertController,
     private menu: MenuController,
+    private cmnService: CommonService
   ) {
     this.initializePages();
     this.initializeApp();
   }
 
   initializePages(): void {
-    const p = environment.pageInfo;
     const pagesMap = new Map<string, PageInterface>();
-    pagesMap.set('home', { title: '홈', url: p.home.url, icon: 'home' });
-    pagesMap.set('cat-list/sp', { title: '맞춤법', url: `${p.catList.url}/sp`, icon: 'pricetags' });
-    pagesMap.set('cat-list/sl', { title: '표준어', url: `${p.catList.url}/sl`, icon: 'pricetags' });
-    pagesMap.set('cat-list/lw', { title: '외래어', url: `${p.catList.url}/lw`, icon: 'pricetags' });
-    pagesMap.set('cat-list/kw', { title: '어휘', url: `${p.catList.url}/kw`, icon: 'pricetags' });
-    pagesMap.set('cat-list/cc', { title: '한자', url: `${p.catList.url}/cc`, icon: 'pricetags' });
-    pagesMap.set('cat-list/c4', { title: '한자성어', url: `${p.catList.url}/c4`, icon: 'pricetags' });
-    pagesMap.set('cat-list/ew', { title: '영단어', url: `${p.catList.url}/ew`, icon: 'pricetags' });
-    pagesMap.set('group-list', { title: '그룹', url: p.groupList.url, icon: 'people' });
-    pagesMap.set('profile', { title: '프로필', url: p.profile.url, icon: 'person' });
-    pagesMap.set('temp', { title: 'temp', url: p.temp.url, icon: 'settings' });
+    pagesMap.set('home', { title: '홈', url: this.p.home.url, icon: 'home' });
+    pagesMap.set('group-list', { title: '그룹', url: this.p.groupList.url, icon: 'people' });
+    pagesMap.set('profile', { title: '프로필', url: this.p.profile.url, icon: 'person' });
+    pagesMap.set('setting', { title: '설정', url: this.p.setting.url, icon: 'settings' });
     this.pagesMap = pagesMap;
   }
 
@@ -116,8 +111,21 @@ export class AppComponent {
       menus.push({ title: '메뉴', pages});
 
       pages = [];
+      const subIdNameMap = this.cmnService.getSubIdNameMap();
       for (const subId of user.subIdList) {
-        const page = this.pagesMap.get(`cat-list/${subId}`);
+
+        const page: PageInterface =  {
+          title: subIdNameMap.get(subId),
+          url: `${this.p.catList.url}/${subId}`, icon: 'pricetags',
+          param: {
+            menuUrl: `${this.p.catList.url}/${subId}`,
+            childUrl: `${this.p.catList.url}`
+          }
+        };
+
+        // add pagesMap
+        this.pagesMap.set(`cat-list/${subId}`, page);
+
         // page.param = subId;
         pages.push(page);
       }
@@ -125,7 +133,7 @@ export class AppComponent {
 
       pages = [];
       pages.push(this.pagesMap.get('profile'));
-      pages.push(this.pagesMap.get('temp'));
+      pages.push(this.pagesMap.get('setting'));
       menus.push({ title: '설정', pages});
 
       this.menus = menus;
@@ -180,7 +188,7 @@ export class AppComponent {
       //   console.log(err);
       // }
 
-      if (this.router.url === '/sign-in') {
+      if (this.router.url === environment.pageInfo.signIn.path) {
         navigator['app'.toString()].exitApp();
       } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
         this.routerOutlet.pop();

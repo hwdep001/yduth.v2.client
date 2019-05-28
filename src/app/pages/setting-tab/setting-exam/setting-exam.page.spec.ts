@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TempTab2Page } from './temp-tab2.page';
+import { SettingExamPage } from './setting-exam.page';
 
-describe('TempTab2Page', () => {
-  let component: TempTab2Page;
-  let fixture: ComponentFixture<TempTab2Page>;
+describe('SettingExamPage', () => {
+  let component: SettingExamPage;
+  let fixture: ComponentFixture<SettingExamPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TempTab2Page ],
+      declarations: [ SettingExamPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TempTab2Page);
+    fixture = TestBed.createComponent(SettingExamPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -14,6 +14,18 @@ export class CommonService {
     private datePipe: DatePipe,
   ) { }
 
+  getSubIdNameMap() {
+    const subMap = new Map<string, string>();
+    subMap.set('sp', '맞춤법');
+    subMap.set('sl', '표준어');
+    subMap.set('lw', '외래어');
+    subMap.set('kw', '어휘');
+    subMap.set('cc', '한자');
+    subMap.set('c4', '한자성어');
+    subMap.set('ew', '영단어');
+    return subMap;
+  }
+
   async presentSucToast(message: string) {
     const toast = await this.toastCtrl.create({
       message,

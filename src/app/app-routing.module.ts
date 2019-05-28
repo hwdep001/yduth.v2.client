@@ -58,8 +58,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: p.temp.path,
-    loadChildren: './pages/temp-tabs/temp-tabs.module#TempTabsPageModule',
+    path: p.setting.path,
+    loadChildren: './pages/setting-tab/setting-tab.module#SettingTabPageModule',
     canActivate: [AuthGuard]
   }
 ];
