@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SettingWordPage } from './setting-word.page';
+import { SettingWordInitPage } from './setting-word-init.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SettingWordPage
+    component: SettingWordInitPage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [SettingWordPage]
+  declarations: [SettingWordInitPage]
 })
-export class SettingWordPageModule {}
+export class SettingWordInitPageModule {}

@@ -10,11 +10,11 @@ import { Cat } from 'src/app/models/Cat';
 import { Day } from 'src/app/models/Day';
 
 @Component({
-  selector: 'app-word-init',
-  templateUrl: './word-init.page.html',
-  styleUrls: ['./word-init.page.scss'],
+  selector: 'app-setting-word-init-days',
+  templateUrl: './setting-word-init-days.page.html',
+  styleUrls: ['./setting-word-init-days.page.scss'],
 })
-export class WordInitPage implements OnInit {
+export class SettingWordInitDaysPage implements OnInit {
 
   private pageInfo = environment.pageInfo;
   public defaultHref: any;
@@ -47,7 +47,7 @@ export class WordInitPage implements OnInit {
     .then(() => loading.dismiss())
     .catch(() => loading.dismiss());
 
-    this.defaultHref = [this.pageInfo.setting.url];
+    this.defaultHref = [this.pageInfo.settingWordInit.url];
   }
 
   private async getDays(catId: number): Promise<any> {
@@ -122,7 +122,7 @@ export class WordInitPage implements OnInit {
     return await this.sclwService.initWordUser(this.initTypeList, dayIdList)
       .then(rd => {
         if (rd.res) {
-          this.cmnService.presentSucToast('초기화 성공');
+          this.cmnService.presentSucToast('초기화 성공', 'top');
         } else {
           alert(rd.toErrString());
         }

@@ -54,14 +54,20 @@ const routes: Routes = [
   },
   {
     path: p.setting.path,
-    loadChildren: './pages/setting-tab/setting-tab.module#SettingTabPageModule',
+    loadChildren: './pages/setting/setting.module#SettingPageModule',
     canActivate: [AuthGuard]
   },
   {
-    path: p.setting.wordInit.path,
-    loadChildren: './pages/setting-tab/word-init/word-init.module#WordInitPageModule',
+    path: p.settingWordInit.path,
+    loadChildren: './pages/setting-word-init/setting-word-init.module#SettingWordInitPageModule',
     canActivate: [AuthGuard]
   },
+  {
+    path: p.settingWordInitDays.path,
+    loadChildren: './pages/setting-word-init-days/setting-word-init-days.module#SettingWordInitDaysPageModule',
+    canActivate: [AuthGuard]
+  }
+
 ];
 
 @NgModule({

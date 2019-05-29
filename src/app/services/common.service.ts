@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { LoadingController, ToastController, AlertController } from '@ionic/angular';
+import { ToastOptions } from '@ionic/core';
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +27,11 @@ export class CommonService {
     return subMap;
   }
 
-  async presentSucToast(message: string) {
+  async presentSucToast(message: string, position?: ToastOptions['position']) {
+
     const toast = await this.toastCtrl.create({
       message,
-      position: 'bottom',
+      position: (position === null ? 'bottom' : position),
       color: 'primary',
       duration: 2000,
       showCloseButton: true,

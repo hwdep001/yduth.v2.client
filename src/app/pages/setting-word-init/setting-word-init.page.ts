@@ -9,13 +9,15 @@ import { Cat } from 'src/app/models/Cat';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-setting-word',
-  templateUrl: './setting-word.page.html',
-  styleUrls: ['./setting-word.page.scss'],
+  selector: 'app-setting-word-init',
+  templateUrl: './setting-word-init.page.html',
+  styleUrls: ['./setting-word-init.page.scss'],
 })
-export class SettingWordPage implements OnInit {
+export class SettingWordInitPage implements OnInit {
 
   private pageInfo = environment.pageInfo;
+  public defaultHref: any;
+
   public subList: Array<Sub>;
 
   constructor(
@@ -36,6 +38,8 @@ export class SettingWordPage implements OnInit {
     await this.getSubsWithCats()
       .then(() => loading.dismiss())
       .catch(() => loading.dismiss());
+
+    this.defaultHref = [this.pageInfo.setting.url];
   }
 
   private async getSubsWithCats(): Promise<any> {
@@ -60,7 +64,7 @@ export class SettingWordPage implements OnInit {
       },
       skipLocationChange: environment.skipLocationChange
     };
-    this.router.navigate([this.pageInfo.setting.wordInit.url], navigationExtras);
+    this.router.navigate([this.pageInfo.settingWordInitDays.url], navigationExtras);
   }
 
 }

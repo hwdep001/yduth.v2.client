@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WordInitPage } from './word-init.page';
+import { SettingWordInitDaysPage } from './setting-word-init-days.page';
 
-describe('WordInitPage', () => {
-  let component: WordInitPage;
-  let fixture: ComponentFixture<WordInitPage>;
+describe('SettingWordInitDaysPage', () => {
+  let component: SettingWordInitDaysPage;
+  let fixture: ComponentFixture<SettingWordInitDaysPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WordInitPage ],
+      declarations: [ SettingWordInitDaysPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WordInitPage);
+    fixture = TestBed.createComponent(SettingWordInitDaysPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
