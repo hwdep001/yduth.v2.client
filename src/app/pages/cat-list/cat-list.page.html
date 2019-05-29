@@ -73,7 +73,8 @@
       <ion-row class="row-all">
         <ion-col class="col-checkbox">
           <ion-item lines="none">
-            <ion-checkbox [(ngModel)]="allCheck" (click)="clickAllCheck($event)"></ion-checkbox>
+            <ion-checkbox color="danger" 
+              [(ngModel)]="allCheck" [indeterminate]="isIndeterminate" (click)="clickAllCheck()"></ion-checkbox>
           </ion-item>
         </ion-col>
         <ion-col class="col-reorder">
@@ -87,7 +88,7 @@
         <ion-row *ngFor="let cat of sub.type1CatList.slice().reverse()">
           <ion-col class="col-checkbox">
             <ion-item lines="none">
-              <ion-checkbox [(ngModel)]="cat.checked" (click)="clickCatCheck($event, cat)"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="cat.checked" (ionChange)="clickCatCheck()"></ion-checkbox>
             </ion-item>
           </ion-col>
           <ion-col class="col-reorder">

@@ -23,8 +23,8 @@ export class SettingWordInitDaysPage implements OnInit {
   public dayList: Array<Day>;
 
   public initTypeList = [];
-  public allCheck = false;
-  public isIndeterminate = false;
+  public allCheck: boolean;
+  public isIndeterminate: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +65,7 @@ export class SettingWordInitDaysPage implements OnInit {
     setTimeout(async () => {
       const loading = await this.cmnService.getLoading();
       loading.present();
+
       this.dayList.forEach(day => {
         day.checked = this.allCheck;
       });
@@ -74,14 +75,15 @@ export class SettingWordInitDaysPage implements OnInit {
   }
 
   clickCheck(): void {
-    console.log('dd');
     const totalItems = this.dayList.length;
     let checked = 0;
+
     this.dayList.map(day => {
       if (day.checked) {
         checked++;
       }
     });
+
     if (checked > 0 && checked < totalItems) {
       // If even one item is checked but not all
       this.isIndeterminate = true;

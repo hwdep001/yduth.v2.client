@@ -63,7 +63,8 @@
       <ion-row class="row-all">
         <ion-col class="col-checkbox">
           <ion-item lines="none">
-            <ion-checkbox [(ngModel)]="allCheck" (click)="clickAllCheck($event)"></ion-checkbox>
+            <ion-checkbox color="danger"
+              [(ngModel)]="allCheck" [indeterminate]="isIndeterminate" (click)="clickAllCheck()"></ion-checkbox>
           </ion-item>
         </ion-col>
         <ion-col class="col-reorder">
@@ -80,7 +81,7 @@
         <ion-row *ngFor="let day of dayList">
           <ion-col class="col-checkbox">
             <ion-item lines="none">
-              <ion-checkbox [(ngModel)]="day.checked" (click)="clickDayCheck($event, day)"></ion-checkbox>
+              <ion-checkbox [(ngModel)]="day.checked" (ionChange)="clickDayCheck()"></ion-checkbox>
             </ion-item>
           </ion-col>
           <ion-col class="col-reorder">

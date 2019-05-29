@@ -28,7 +28,9 @@ export class DayListPage implements OnInit {
   public cat: Cat;
   public dayList: Array<Day>;
   public dayListCopy: Array<Day>;
+
   public allCheck: boolean;
+  public isIndeterminate: boolean;
 
   public isFabBtn = true;
   public isSetting = false;
@@ -128,27 +130,42 @@ export class DayListPage implements OnInit {
     event.detail.complete();
   }
 
-  clickAllCheck(ev) {
-    const checkVal = !ev.target.checked;
-    for (const day of this.dayList) {
-      day.checked = checkVal;
-    }
+  clickAllCheck() {
+    setTimeout(async () => {
+      const loading = await this.cmnService.getLoading();
+      loading.present();
+
+      for (const day of this.dayList) {
+        day.checked = this.allCheck;
+      }
+
+      loading.dismiss();
+    });
   }
 
-  clickDayCheck(ev, day: Day) {
-    const checkVal = !ev.target.checked;
-    day.checked = checkVal;
+  clickDayCheck() {
+    const totalItems = this.dayList.length;
+    let checked = 0;
 
-    let allCheck = true;
-    for (const tempDay of this.dayList) {
-      if (!tempDay.checked) {
-        allCheck = false;
-        break;
+    this.dayList.map(day => {
+      if (day.checked) {
+        checked++;
       }
-    }
+    });
 
-    this.allCheck = allCheck;
-    day.checked = !checkVal;
+    if (checked > 0 && checked < totalItems) {
+      // If even one item is checked but not all
+      this.isIndeterminate = true;
+      this.allCheck = false;
+    } else if (checked === totalItems) {
+      // If all are checked
+      this.allCheck = true;
+      this.isIndeterminate = false;
+    } else {
+      // If none is checked
+      this.isIndeterminate = false;
+      this.allCheck = false;
+    }
   }
 
   clickSetting(): void {
