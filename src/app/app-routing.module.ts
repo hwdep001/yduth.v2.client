@@ -43,11 +43,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: p.groupList.path,
-    loadChildren: './pages/group-list/group-list.module#GroupListPageModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: p.profile.path,
     loadChildren: './pages/profile/profile.module#ProfilePageModule',
     canActivate: [AuthGuard]

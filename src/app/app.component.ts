@@ -46,7 +46,6 @@ export class AppComponent {
   initializePages(): void {
     const pagesMap = new Map<string, PageInterface>();
     pagesMap.set('home', { title: '홈', url: this.p.home.url, icon: 'home' });
-    pagesMap.set('group-list', { title: '그룹', url: this.p.groupList.url, icon: 'people' });
     pagesMap.set('profile', { title: '프로필', url: this.p.profile.url, icon: 'person' });
     pagesMap.set('setting', { title: '설정', url: this.p.setting.url, icon: 'settings' });
     this.pagesMap = pagesMap;
@@ -117,7 +116,6 @@ export class AppComponent {
 
       let pages = [];
       pages.push(this.pagesMap.get('home'));
-      pages.push(this.pagesMap.get('group-list'));
       menus.push({ title: '메뉴', pages});
 
       pages = [];
