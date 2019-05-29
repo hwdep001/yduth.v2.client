@@ -16,7 +16,7 @@
 
       <ion-item *ngFor="let cat of sub.type0CatList">
         <label>{{cat.name}}</label>
-        <ion-buttons slot="end" class="cursor" (click)="presentInitModal(cat)">
+        <ion-buttons slot="end" class="cursor" (click)="moveDayList(cat)">
           <ion-icon name="refresh" color="medium"></ion-icon>
         </ion-buttons>
       </ion-item>

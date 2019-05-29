@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
 
 import { environment } from 'src/environments/environment';
 
@@ -10,11 +10,11 @@ import { Cat } from 'src/app/models/Cat';
 import { Day } from 'src/app/models/Day';
 
 @Component({
-  selector: 'app-day-list-modal',
-  templateUrl: './day-list-modal.page.html',
-  styleUrls: ['./day-list-modal.page.scss'],
+  selector: 'app-word-init',
+  templateUrl: './word-init.page.html',
+  styleUrls: ['./word-init.page.scss'],
 })
-export class DayListModalPage implements OnInit {
+export class WordInitPage implements OnInit {
 
   private pageInfo = environment.pageInfo;
   public defaultHref: any;
@@ -24,11 +24,10 @@ export class DayListModalPage implements OnInit {
 
   public initTypeList = [];
   public allCheck = false;
-  public isInitBtn = false;
+  public isIndeterminate = false;
 
   constructor(
-    private modalController: ModalController,
-    private navParams: NavParams,
+    private route: ActivatedRoute,
     private cmnService: CommonService,
     private sclwService: SclwService
   ) { }
@@ -42,13 +41,13 @@ export class DayListModalPage implements OnInit {
     const loading = await this.cmnService.getLoading();
     loading.present();
 
-    this.cat = this.navParams.get('cat') as Cat;
+    this.cat = JSON.parse(this.route.snapshot.queryParams.cat) as Cat;
 
     await this.getDays(this.cat.id)
     .then(() => loading.dismiss())
     .catch(() => loading.dismiss());
 
-    this.defaultHref = [this.pageInfo.setting.word.url];
+    this.defaultHref = [this.pageInfo.setting.url];
   }
 
   private async getDays(catId: number): Promise<any> {
@@ -62,49 +61,50 @@ export class DayListModalPage implements OnInit {
       }). catch(err => alert(err));
   }
 
-  async closeModal() {
-    await this.modalController.dismiss();
+  clickAllCheck() {
+    setTimeout(async () => {
+      const loading = await this.cmnService.getLoading();
+      loading.present();
+      this.dayList.forEach(day => {
+        day.checked = this.allCheck;
+      });
+
+      loading.dismiss();
+    });
   }
 
-  clickAllCheck(ev): void {
-    const checkVal = !ev.target.checked;
-    for (const day of this.dayList) {
-      day.checked = checkVal;
-    }
-  }
-
-  clickCheck(ev, day: Day): void {
-    const checkVal = !ev.target.checked;
-    day.checked = checkVal;
-
-    let allCheck = true;
-    for (const tempDay of this.dayList) {
-      if (!tempDay.checked) {
-        allCheck = false;
-        break;
+  clickCheck(): void {
+    console.log('dd');
+    const totalItems = this.dayList.length;
+    let checked = 0;
+    this.dayList.map(day => {
+      if (day.checked) {
+        checked++;
       }
-    }
-
-    this.allCheck = allCheck;
-    day.checked = !checkVal;
-  }
-
-  checkInitBtn(): void {
-    if (this.initTypeList.length > 0) {
-      for (const day of this.dayList) {
-        if (day.checked) {
-          this.isInitBtn = true;
-          break;
-        } else {
-          this.isInitBtn = false;
-        }
-      }
+    });
+    if (checked > 0 && checked < totalItems) {
+      // If even one item is checked but not all
+      this.isIndeterminate = true;
+      this.allCheck = false;
+    } else if (checked === totalItems) {
+      // If all are checked
+      this.allCheck = true;
+      this.isIndeterminate = false;
     } else {
-      this.isInitBtn = false;
+      // If none is checked
+      this.isIndeterminate = false;
+      this.allCheck = false;
     }
   }
 
   async init() {
+    if (this.initTypeList.length === 0) {
+      this.cmnService.getAlert(null, null, '초기화 항목을 선택해 주세요').then(alert => {
+        alert.present();
+      });
+      return;
+    }
+
     const dayIdList = new Array<number>();
     this.dayList.forEach((day) => {
       if (day.checked) {
@@ -112,10 +112,16 @@ export class DayListModalPage implements OnInit {
       }
     });
 
+    if (dayIdList.length === 0) {
+      this.cmnService.getAlert(null, null, 'Day를 선택해 주세요').then(alert => {
+        alert.present();
+      });
+      return;
+    }
+
     return await this.sclwService.initWordUser(this.initTypeList, dayIdList)
       .then(rd => {
         if (rd.res) {
-          this.closeModal();
           this.cmnService.presentSucToast('초기화 성공');
         } else {
           alert(rd.toErrString());

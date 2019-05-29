@@ -197,7 +197,7 @@ export class AppComponent {
       //   console.log(err);
       // }
 
-      if (this.router.url === environment.pageInfo.signIn.path) {
+      if (this.router.url === environment.pageInfo.signIn.url) {
         navigator['app'.toString()].exitApp();
       } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
         this.routerOutlet.pop();

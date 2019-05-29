@@ -1,12 +1,12 @@
+import { NavigationExtras, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
 
 import { CommonService } from 'src/app/services/common.service';
 import { SclwService } from 'src/app/services/sclw.service';
 
 import { Sub } from 'src/app/models/Sub';
 import { Cat } from 'src/app/models/Cat';
-import { DayListModalPage } from '../../modals/day-list-modal/day-list-modal.page';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-setting-word',
@@ -15,10 +15,11 @@ import { DayListModalPage } from '../../modals/day-list-modal/day-list-modal.pag
 })
 export class SettingWordPage implements OnInit {
 
+  private pageInfo = environment.pageInfo;
   public subList: Array<Sub>;
 
   constructor(
-    private modalCtrl: ModalController,
+    private router: Router,
     private cmnService: CommonService,
     private sclwService: SclwService
   ) { }
@@ -52,15 +53,14 @@ export class SettingWordPage implements OnInit {
       }).catch(err => alert(err));
   }
 
-  async presentInitModal(cat: Cat): Promise<any> {
-    const modal = await this.modalCtrl.create({
-      component: DayListModalPage,
-      componentProps: {
-        'cat': cat
-      }
-    });
-
-    return await modal.present();
+  async moveDayList(cat: Cat): Promise<any> {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        cat: JSON.stringify(cat)
+      },
+      skipLocationChange: environment.skipLocationChange
+    };
+    this.router.navigate([this.pageInfo.setting.wordInit.url], navigationExtras);
   }
 
 }

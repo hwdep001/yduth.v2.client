@@ -61,7 +61,12 @@ const routes: Routes = [
     path: p.setting.path,
     loadChildren: './pages/setting-tab/setting-tab.module#SettingTabPageModule',
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: p.setting.wordInit.path,
+    loadChildren: './pages/setting-tab/word-init/word-init.module#WordInitPageModule',
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

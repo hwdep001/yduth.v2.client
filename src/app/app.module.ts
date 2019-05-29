@@ -20,8 +20,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { environment } from './../environments/environment';
 
-import { DayListModalPageModule } from './pages/modals/day-list-modal/day-list-modal.module';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,8 +34,7 @@ import { DayListModalPageModule } from './pages/modals/day-list-modal/day-list-m
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    HttpClientModule,
-    DayListModalPageModule
+    HttpClientModule
   ],
   providers: [
     StatusBar,

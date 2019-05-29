@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-setting-tab',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./setting-tab.page.scss'],
 })
 export class SettingTabPage implements OnInit {
+
+  public pageInfo = environment.pageInfo;
 
   constructor() { }
 

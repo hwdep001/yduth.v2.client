@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DayListModalPage } from './day-list-modal.page';
+import { WordInitPage } from './word-init.page';
 
-describe('DayListModalPage', () => {
-  let component: DayListModalPage;
-  let fixture: ComponentFixture<DayListModalPage>;
+describe('WordInitPage', () => {
+  let component: WordInitPage;
+  let fixture: ComponentFixture<WordInitPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DayListModalPage ],
+      declarations: [ WordInitPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DayListModalPage);
+    fixture = TestBed.createComponent(WordInitPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
